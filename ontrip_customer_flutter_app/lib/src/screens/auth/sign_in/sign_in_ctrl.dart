@@ -68,7 +68,7 @@ class SignInCtrl extends GetxController {
     final token = responseData['token'];
     await writeStorage(AppSession.token, token);
 
-    Get.find<MasterController>().onInit();
+    await Get.find<MasterController>().ensureEnvironmentLoaded();
     if (Get.isRegistered<HomeController>()) {
       Get.find<HomeController>().initialize();
     }

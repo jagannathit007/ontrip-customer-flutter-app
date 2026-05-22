@@ -15,11 +15,13 @@ class AuthenticationController extends GetxService {
       final response = await ApiManager.call(endPoint: endpoint, type: ApiType.get);
 
       if (response.status == 1 || response.status == 200) {
-        if (response.data != null) {
+        final data = response.data;
+        if (data is Map) {
+          final dataMap = Map<String, dynamic>.from(data);
           // Customer API returns data.customer; vendor API returns data.vendor
-          final profileData = response.data['vendor'] ?? response.data['customer'];
-          if (profileData != null) {
-            userAuthData.assignAll(profileData);
+          final profileData = dataMap['vendor'] ?? dataMap['customer'];
+          if (profileData is Map) {
+            userAuthData.assignAll(Map<String, dynamic>.from(profileData));
           }
         }
       }

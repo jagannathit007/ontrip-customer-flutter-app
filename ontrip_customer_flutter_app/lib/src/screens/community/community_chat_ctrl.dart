@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
-
 import 'package:dio/dio.dart' as dio;
 import 'package:gal/gal.dart';
 import '../../../../../app_export.dart';
@@ -70,19 +67,13 @@ class CommunityChatCtrl extends GetxController {
       }
 
       if (isVendorMode) {
-        // Vendor: use the same community endpoint as customer if packageId is available
-        if (packageId != null && packageId.isNotEmpty) {
-          await fetchCommunityInfo(packageId);
-          if (community.value != null) {
-            await fetchNotificationPreference();
-            await fetchMessages();
+        if (currentBookingId != null && currentBookingId!.isNotEmpty && currentCustomerId != null && currentCustomerId!.isNotEmpty) {
+          await loadVendorChat();
+          if (coverImage.value == null || coverImage.value!.isEmpty) {
+            coverImage.value = community.value?.package?.coverImage;
           }
-        } else if (currentBookingId != null && currentBookingId!.isNotEmpty) {
-          await fetchVendorCommunityInfo(currentBookingId!, currentCustomerId ?? "");
-          if (community.value != null) {
-            await fetchNotificationPreference();
-            await fetchMessages();
-          }
+        } else {
+          debugPrint('Vendor chat: missing bookingId or customerId');
         }
       } else {
         // Customer: existing flow
@@ -112,17 +103,88 @@ class CommunityChatCtrl extends GetxController {
     }
   }
 
-  Future<void> fetchVendorCommunityInfo(String bookingId, String customerId) async {
-    try {
-      final response = await ApiManager.call(endPoint: BACKEND.vendorChat(bookingId, customerId), type: ApiType.get);
+  /// GET vendors/chat/{bookingId}?customerId= — loads community + messages
+  Future<void> loadVendorChat({bool showLoading = true}) async {
+    if (currentBookingId == null || currentCustomerId == null) return;
 
-      if ((response.status == 1 || response.status == 200) && response.success == true) {
-        final communityData = CommunityResponse.fromJson(response.data);
-        community.value = communityData.community;
+    try {
+      if (showLoading) isLoading.value = true;
+      final response = await ApiManager.call(endPoint: BACKEND.vendorChatGet(currentBookingId!, currentCustomerId!), type: ApiType.get);
+
+      if ((response.status == 1 || response.status == 200) && response.success == true && response.data is Map) {
+        final data = Map<String, dynamic>.from(response.data as Map);
+
+        if (data['community'] != null) {
+          final communityData = CommunityResponse.fromJson(data);
+          community.value = communityData.community;
+          communityId = community.value?.id;
+        } else {
+          _applyVendorChatContext(data);
+        }
+
+        _assignMessagesFromData(data);
       }
     } catch (e) {
-      debugPrint("Error fetching vendor community info: $e");
+      debugPrint("Error loading vendor chat: $e");
+    } finally {
+      if (showLoading) isLoading.value = false;
     }
+  }
+
+  void _applyVendorChatContext(Map<String, dynamic> data) {
+    final bookingRaw = data['booking'];
+    String? bookingRef;
+    String? bookingLabel;
+    if (bookingRaw is Map) {
+      bookingRef = bookingRaw['_id']?.toString();
+      bookingLabel = bookingRaw['bookingId']?.toString();
+    } else {
+      bookingRef = currentBookingId;
+    }
+
+    Map? customerRaw;
+    final rawMessages = data['messages'];
+    if (rawMessages is List && rawMessages.isNotEmpty && rawMessages.first is Map) {
+      customerRaw = (rawMessages.first as Map)['customer'] as Map?;
+    }
+    final customerName = customerRaw is Map ? customerRaw['name']?.toString() : null;
+
+    communityId = bookingRef ?? currentBookingId;
+    community.value = Community(
+      id: communityId,
+      package: CommunityPackage(
+        id: bookingRef,
+        title: bookingLabel ?? customerName ?? 'Vendor Chat',
+        destination: customerName,
+      ),
+      customerMembers: customerName != null
+          ? [CustomerMember(id: currentCustomerId, name: customerName)]
+          : null,
+    );
+  }
+
+  void _assignMessagesFromData(Map<String, dynamic> data) {
+    final raw = data['messages'];
+    if (raw is! List) return;
+
+    var newMsgs = raw
+        .map((x) {
+          if (x is! Map) return null;
+          return CommunityMessage.fromJson(Map<String, dynamic>.from(x));
+        })
+        .whereType<CommunityMessage>()
+        .toList();
+
+    if (newMsgs.isNotEmpty && newMsgs.length > 1) {
+      final firstTime = newMsgs.first.createdAt;
+      final lastTime = newMsgs.last.createdAt;
+      if (firstTime != null && lastTime != null && firstTime.isBefore(lastTime)) {
+        newMsgs = newMsgs.reversed.toList();
+      }
+    }
+
+    messages.assignAll(newMsgs);
+    _scrollToBottom();
   }
 
   Future<void> listenForNewMessages() async {
@@ -136,8 +198,11 @@ class CommunityChatCtrl extends GetxController {
       try {
         final newMessage = CommunityMessage.fromJson(messageJson);
 
-        // Ensure message belongs to current community
-        if (newMessage.community == community.value?.id) {
+        final belongsToChat = isVendorMode
+            ? newMessage.community == currentBookingId || newMessage.community == communityId
+            : newMessage.community == community.value?.id;
+
+        if (belongsToChat) {
           // Check for deduplication
           final alreadyExists = messages.any((msg) => msg.id == newMessage.id);
 
@@ -154,7 +219,9 @@ class CommunityChatCtrl extends GetxController {
   }
 
   Future<void> connectToCommunity() async {
-    socketService.emitEvent(communityId);
+    final roomId = communityId?.toString() ?? (isVendorMode ? currentBookingId : null);
+    if (roomId == null || roomId.isEmpty) return;
+    socketService.emitEvent(roomId);
     // socketService.e((data) {
     //   data = data["data"];
     //   log('--------------------socket data-------------------------');
@@ -216,6 +283,11 @@ class CommunityChatCtrl extends GetxController {
   }
 
   Future<void> fetchMessages({bool showLoading = true}) async {
+    if (isVendorMode) {
+      await loadVendorChat(showLoading: showLoading);
+      return;
+    }
+
     if (community.value == null) return;
 
     try {
@@ -287,20 +359,25 @@ class CommunityChatCtrl extends GetxController {
   Future<void> sendMessage() async {
     final content = messageController.text.trim();
     // if (content.isEmpty || community.value == null) return;
-    if (content.isEmpty || community.value == null) {
+    if (content.isEmpty) return;
+    if (isVendorMode) {
+      if (currentBookingId == null || currentCustomerId == null) {
+        warningToast('No booking chat found!');
+        return;
+      }
+    } else if (community.value == null) {
       warningToast('No community chat found!');
       return;
     }
     try {
       isSending.value = true;
-      communityId = community.value!.id;
+      communityId = community.value?.id;
       messageController.clear();
 
       dynamic response;
       if (isVendorMode) {
-        if (currentBookingId == null || currentCustomerId == null) return;
         final formData = dio.FormData.fromMap({'message': content, 'customerId': currentCustomerId});
-        response = await ApiManager.call(endPoint: "vendors/chat/$currentBookingId", type: ApiType.post, body: formData);
+        response = await ApiManager.call(endPoint: BACKEND.vendorChatPost(currentBookingId!), type: ApiType.post, body: formData);
       } else {
         response = await ApiManager.call(
           endPoint: "${BACKEND.communityMessages}${community.value!.id}/messages",
@@ -407,7 +484,13 @@ class CommunityChatCtrl extends GetxController {
   //   }
   // }
   Future<void> sendMedia() async {
-    if ((selectedImages.isEmpty && selectedVideos.isEmpty) || community.value == null) {
+    if (selectedImages.isEmpty && selectedVideos.isEmpty) return;
+    if (isVendorMode) {
+      if (currentBookingId == null || currentCustomerId == null) {
+        warningToast('No booking chat found!');
+        return;
+      }
+    } else if (community.value == null) {
       warningToast('No community chat found!');
       return;
     }
@@ -429,7 +512,7 @@ class CommunityChatCtrl extends GetxController {
             'customerId': currentCustomerId,
             if (caption.isNotEmpty) 'message': caption,
           });
-          response = await ApiManager.call(endPoint: "vendors/chat/$currentBookingId", type: ApiType.post, body: formData);
+          response = await ApiManager.call(endPoint: BACKEND.vendorChatPost(currentBookingId!), type: ApiType.post, body: formData);
         } else {
           final formData = dio.FormData.fromMap({
             'media': await dio.MultipartFile.fromFile(xfile.path, filename: xfile.name),
@@ -454,7 +537,7 @@ class CommunityChatCtrl extends GetxController {
             'customerId': currentCustomerId,
             if (caption.isNotEmpty) 'message': caption,
           });
-          response = await ApiManager.call(endPoint: "vendors/chat/$currentBookingId", type: ApiType.post, body: formData);
+          response = await ApiManager.call(endPoint: BACKEND.vendorChatPost(currentBookingId!), type: ApiType.post, body: formData);
         } else {
           final formData = dio.FormData.fromMap({
             'media': await dio.MultipartFile.fromFile(xfile.path, filename: xfile.name),

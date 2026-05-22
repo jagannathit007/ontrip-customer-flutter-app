@@ -92,7 +92,10 @@ class CommunityChatScreen extends StatelessWidget {
       ),
       title: Obx(() {
         final title = controller.community.value?.package?.title ?? "Community";
-        final participants = (controller.community.value?.agentMembers?.length ?? 0) + (controller.community.value?.customerMembers?.length ?? 0);
+        final participants =
+            (controller.community.value?.agentMembers?.length ?? 0) +
+            (controller.community.value?.vendorMembers?.length ?? 0) +
+            (controller.community.value?.customerMembers?.length ?? 0);
         return Row(
           children: [
             Expanded(
@@ -190,7 +193,8 @@ class CommunityChatScreen extends StatelessWidget {
 
   Widget _buildMessageBubble(CommunityMessage message) {
     final authCtrl = Get.find<AuthenticationController>();
-    final isMe = message.sender is Map && message.sender["_id"] == authCtrl.userAuthData["_id"];
+    final myId = authCtrl.userAuthData["_id"]?.toString();
+    final isMe = myId != null && message.senderId == myId;
     final time = message.createdAt != null ? AppDateFormat.hhmma(message.createdAt!) : "";
 
     return Padding(
@@ -253,8 +257,8 @@ class CommunityChatScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isMe) const SizedBox(width: 40),
-              if (!isMe) const SizedBox(width: 40),
+              // if (isMe) const SizedBox(width: 40),
+              // if (!isMe) const SizedBox(width: 40),
             ],
           ),
         ],
@@ -541,7 +545,7 @@ class CommunityChatScreen extends StatelessWidget {
                           controller: controller.messageController,
                           style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B)),
                           decoration: InputDecoration(
-                            hintText: hasImages ? "Add a captionsss..." : "Type your message...",
+                            hintText: hasImages ? "Add a caption..." : "Type your message...",
                             hintStyle: AppTextStyle.medium.copyWith(color: const Color(0xFF94A3B8), fontSize: 15),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(vertical: 14),

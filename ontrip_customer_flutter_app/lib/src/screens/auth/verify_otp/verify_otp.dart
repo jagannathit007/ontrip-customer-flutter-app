@@ -153,7 +153,7 @@ class VerifyOTPScreen extends GetView<VerifyOTPCtrl> {
         child: InkWell(
           onTap: controller.isLoading.value ? null : () => controller.verifyOTP(),
           borderRadius: BorderRadius.circular(20),
-          child: Container(
+          child: SizedBox(
             height: 60,
             width: double.infinity,
             child: Row(

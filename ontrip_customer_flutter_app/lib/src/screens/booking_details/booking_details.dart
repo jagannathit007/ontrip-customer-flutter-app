@@ -31,7 +31,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.all(8),
+            // margin: const EdgeInsets.all(8),
             child: IconButton(
               icon: Container(
                 padding: const EdgeInsets.all(8),
@@ -701,6 +701,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  width: Get.width,
                   padding: const EdgeInsets.all(32),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -777,10 +778,29 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(exp.name ?? "Event", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B))),
+                    const SizedBox(height: 6),
+                    if ((exp.description ?? "").trim().isNotEmpty)
+                      CustomReadMoreText(
+                        exp.description!.trim(),
+                        trimMode: TrimMode.line,
+                        trimLines: 2,
+                        trimCollapsedText: 'Show more',
+                        trimExpandedText: 'Show less',
+                        style: AppTextStyle.medium.copyWith(fontSize: 14, color: const Color(0xFF64748B), height: 1.5),
+                        moreStyle: AppTextStyle.semiBold.copyWith(fontSize: 14, color: Constant.instance.primary),
+                        lessStyle: AppTextStyle.semiBold.copyWith(fontSize: 14, color: Constant.instance.primary),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 18),
                 Row(
                   children: [
                     Container(
@@ -794,33 +814,29 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.2)),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Icon(Icons.access_time_rounded, size: 16, color: const Color(0xFF3B82F6)),
-                          const SizedBox(width: 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.access_time_rounded, size: 16, color: const Color(0xFF3B82F6)),
+                              const SizedBox(width: 4),
+                              Text(
+                                "Time",
+                                style: AppTextStyle.bold.copyWith(fontWeight: FontWeight.w700, fontSize: 12, color: const Color(0xFF3B82F6)),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
                           Text(
                             "${exp.startTime}${exp.endTime != null && exp.endTime!.isNotEmpty ? ' — ${exp.endTime}' : ''}",
-                            style: AppTextStyle.bold.copyWith(fontSize: 12, color: const Color(0xFF1E293B)),
+                            style: AppTextStyle.bold.copyWith(fontSize: 14, color: const Color(0xFF1E293B)),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(exp.name ?? "Event", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B))),
-                          const SizedBox(height: 8),
-                          Text(exp.description ?? "", style: AppTextStyle.medium.copyWith(fontSize: 14, color: const Color(0xFF64748B), height: 1.5)),
-                        ],
-                      ),
-                    ),
+                    Spacer(),
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () => controller.callVendor(exp.vendor?.phone),
@@ -840,6 +856,28 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
                     ),
                   ],
                 ),
+                // const SizedBox(height: 20),
+                // Row(
+                //   children: [
+                //     const SizedBox(width: 16),
+                // GestureDetector(
+                //   onTap: () => controller.callVendor(exp.vendor?.phone),
+                //   child: Container(
+                //     padding: const EdgeInsets.all(12),
+                //     decoration: BoxDecoration(
+                //       gradient: LinearGradient(
+                //         begin: Alignment.topLeft,
+                //         end: Alignment.bottomRight,
+                //         colors: [Constant.instance.green2, Constant.instance.green2.withValues(alpha: 0.8)],
+                //       ),
+                //       shape: BoxShape.circle,
+                //       boxShadow: [BoxShadow(color: Constant.instance.green2.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+                //     ),
+                //     child: const Icon(Icons.call_rounded, color: Colors.white, size: 20),
+                //   ),
+                // ),
+                //   ],
+                // ),
               ],
             ),
           ),

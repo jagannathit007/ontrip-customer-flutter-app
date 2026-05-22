@@ -135,7 +135,7 @@ class VerifyOTPCtrl extends GetxController {
     if (token != null && token.isNotEmpty) {
       await writeStorage(AppSession.token, token);
       await writeStorage(AppSession.userRole, isVendor ? 'vendor' : 'customer');
-      Get.find<MasterController>().onInit();
+      await Get.find<MasterController>().ensureEnvironmentLoaded();
 
       if (isVendor) {
         // Vendor: fetch vendor profile + vendor packages

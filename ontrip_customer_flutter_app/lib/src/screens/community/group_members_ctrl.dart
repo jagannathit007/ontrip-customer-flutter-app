@@ -36,7 +36,8 @@ class GroupMembersCtrl extends GetxController {
         .where(
           (a) =>
               (a.name?.toLowerCase().contains(searchQuery.value) ?? false) ||
-              (a.email?.toLowerCase().contains(searchQuery.value) ?? false),
+              (a.email?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (a.phone?.toLowerCase().contains(searchQuery.value) ?? false),
         )
         .toList();
   }
@@ -48,7 +49,23 @@ class GroupMembersCtrl extends GetxController {
         .where(
           (c) =>
               (c.name?.toLowerCase().contains(searchQuery.value) ?? false) ||
-              (c.email?.toLowerCase().contains(searchQuery.value) ?? false),
+              (c.email?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (c.phone?.toLowerCase().contains(searchQuery.value) ?? false),
+        )
+        .toList();
+  }
+
+  List<VendorMember> get filteredVendors {
+    final vendors = community.value?.vendorMembers ?? [];
+    if (searchQuery.value.isEmpty) return vendors;
+    return vendors
+        .where(
+          (v) =>
+              (v.name?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (v.email?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (v.phone?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (v.contactPerson?.toLowerCase().contains(searchQuery.value) ?? false) ||
+              (v.type?.toLowerCase().contains(searchQuery.value) ?? false),
         )
         .toList();
   }

@@ -100,36 +100,6 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget _buildTripInfoCard() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: kWhite.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: kWhite.withValues(alpha: 0.1), width: 1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(color: kWhite.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
-            child: Icon(Icons.image_outlined, color: kWhite.withValues(alpha: 0.5)),
-          ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Ladakh Premium", style: AppTextStyle.bold.copyWith(fontSize: 15, color: kWhite)),
-              const SizedBox(height: 4),
-              Text("8 days · Confirmed", style: AppTextStyle.regular.copyWith(fontSize: 12, color: kSubwhite)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildRoleChip(SignInCtrl ctrl, UserRole role, String label) {
     return Obx(() {
       final isSelected = ctrl.selectedRole.value == role;

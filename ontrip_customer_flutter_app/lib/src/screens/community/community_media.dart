@@ -31,27 +31,24 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                 ),
               ),
               centerTitle: true,
-              leading: Container(
-                // margin: const EdgeInsets.all(8),
-                child: IconButton(
-                  onPressed: () {
-                    if (controller.selectionMode.value) {
-                      controller.toggleSelectionMode(false);
-                      return;
-                    }
-                    Get.back();
-                  },
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    // decoration: BoxDecoration(
-                    //   color: const Color(0xFFF1F5F9),
-                    //   // borderRadius: BorderRadius.circular(12),
-                    // ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 16,
-                      color: Color(0xFF1E293B),
-                    ),
+              leading: IconButton(
+                onPressed: () {
+                  if (controller.selectionMode.value) {
+                    controller.toggleSelectionMode(false);
+                    return;
+                  }
+                  Get.back();
+                },
+                icon: Container(
+                  padding: const EdgeInsets.all(8),
+                  // decoration: BoxDecoration(
+                  //   color: const Color(0xFFF1F5F9),
+                  //   // borderRadius: BorderRadius.circular(12),
+                  // ),
+                  child: const Icon(
+                    Icons.arrow_back_ios_new,
+                    size: 16,
+                    color: Color(0xFF1E293B),
                   ),
                 ),
               ),

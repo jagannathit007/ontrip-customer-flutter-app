@@ -4,10 +4,24 @@ class BookingResponseData {
 
   BookingResponseData({this.bookings, this.pagination});
 
-  factory BookingResponseData.fromJson(Map<String, dynamic> json) => BookingResponseData(
-    bookings: json["bookings"] == null ? null : List<Booking>.from(json["bookings"].map((x) => Booking.fromJson(x))),
-    pagination: json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]),
-  );
+  factory BookingResponseData.fromJson(dynamic json) {
+    if (json is! Map) return BookingResponseData();
+    final map = Map<String, dynamic>.from(json);
+    return BookingResponseData(
+      bookings: map["bookings"] == null
+          ? null
+          : List<Booking>.from(
+              (map["bookings"] as List).map(
+                (x) => Booking.fromJson(x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{}),
+              ),
+            ),
+      pagination: map["pagination"] == null
+          ? null
+          : Pagination.fromJson(
+              map["pagination"] is Map ? Map<String, dynamic>.from(map["pagination"]) : <String, dynamic>{},
+            ),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "bookings": bookings == null ? null : List<dynamic>.from(bookings!.map((x) => x.toJson())),
@@ -70,7 +84,13 @@ class Booking {
     bookedBy: json["bookedBy"],
     customer: json["customer"] == null ? null : Customer.fromJson(json["customer"]),
     agencyCustomer: json["agencyCustomer"] == null ? null : AgencyCustomer.fromJson(json["agencyCustomer"]),
-    travelers: json["travelers"] == null ? null : List<Traveler>.from(json["travelers"].map((x) => Traveler.fromJson(x))),
+    travelers: json["travelers"] == null
+        ? null
+        : List<Traveler>.from(
+            (json["travelers"] as List).map(
+              (x) => Traveler.fromJson(x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{}),
+            ),
+          ),
     travelerCount: json["travelerCount"] is int ? json["travelerCount"] : (json["travelerCount"] as double?)?.toInt(),
     travelDate: json["travelDate"] == null ? null : DateTime.parse(json["travelDate"]),
     totalAmount: json["totalAmount"] is int ? json["totalAmount"] : (json["totalAmount"] as double?)?.toInt(),

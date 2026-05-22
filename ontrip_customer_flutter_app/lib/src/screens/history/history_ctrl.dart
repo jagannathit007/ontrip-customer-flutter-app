@@ -41,7 +41,8 @@ class HistoryCtrl extends GetxController {
       );
 
       if ((response.status == 1 || response.status == 200) &&
-          response.success == true) {
+          response.success == true &&
+          response.data != null) {
         final bookingData = BookingResponseData.fromJson(response.data);
         bookings.assignAll(bookingData.bookings ?? []);
         totalTrips.value = bookingData.pagination?.total ?? bookings.length;

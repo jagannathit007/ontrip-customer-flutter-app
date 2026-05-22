@@ -41,7 +41,13 @@ class GroupMembersScreen extends StatelessWidget {
                     final _ = controller.searchQuery.value;
                     return ListView(
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
-                      children: [_buildAgentsSection(controller), const SizedBox(height: 24), _buildTravelersSection(controller)],
+                      children: [
+                        _buildAgentsSection(controller),
+                        const SizedBox(height: 24),
+                        _buildVendorsSection(controller),
+                        const SizedBox(height: 24),
+                        _buildTravelersSection(controller),
+                      ],
                     );
                   }),
                 ),
@@ -82,7 +88,7 @@ class GroupMembersScreen extends StatelessWidget {
         children: [
           Text("Group Members", style: AppTextStyle.bold.copyWith(fontSize: 18, color: Colors.black)),
           Obx(() {
-            final totalMembers = controller.filteredAgents.length + controller.filteredCustomers.length;
+            final totalMembers = controller.filteredAgents.length + controller.filteredVendors.length + controller.filteredCustomers.length;
             return Text("$totalMembers people on this journey", style: AppTextStyle.medium.copyWith(fontSize: 12, color: _greyText));
           }),
         ],
@@ -183,6 +189,36 @@ class GroupMembersScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildVendorsSection(GroupMembersCtrl controller) {
+    if (controller.filteredVendors.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader("Vendors", controller.filteredVendors.length),
+        const SizedBox(height: 12),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: _borderColor.withValues(alpha: 0.5)),
+          ),
+          child: Column(
+            children: List.generate(controller.filteredVendors.length, (index) {
+              final vendor = controller.filteredVendors[index];
+              return Column(
+                children: [
+                  _buildVendorTile(vendor),
+                  if (index != controller.filteredVendors.length - 1) Divider(height: 1, color: _borderColor.withValues(alpha: 0.3), indent: 70),
+                ],
+              );
+            }),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildTravelersSection(GroupMembersCtrl controller) {
     if (controller.filteredCustomers.isEmpty) return const SizedBox.shrink();
 
@@ -252,6 +288,34 @@ class GroupMembersScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildVendorTile(VendorMember vendor) {
+    final avatarColor = _getAvatarColor(vendor.name);
+    final typeInfo = _getVendorTypeInfo(vendor.type);
+    final subtitle = vendor.email?.isNotEmpty == true ? vendor.email! : (vendor.phone ?? "");
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          _buildAvatar(vendor.name, avatarColor),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(vendor.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.black)),
+                Text(subtitle, maxLines: 1, style: AppTextStyle.medium.copyWith(fontSize: 13, color: _greyText)),
+                if (vendor.contactPerson?.isNotEmpty == true)
+                  Text(vendor.contactPerson!, style: AppTextStyle.medium.copyWith(fontSize: 12, color: _greyText.withValues(alpha: 0.8))),
+              ],
+            ),
+          ),
+          _buildRoleLabel(typeInfo['label'] as String, typeInfo['bg'] as Color, typeInfo['text'] as Color),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTravelerTile(CustomerMember member) {
     final avatarColor = _getAvatarColor(member.name);
 
@@ -294,6 +358,19 @@ class GroupMembersScreen extends StatelessWidget {
       decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
       child: Text(label, style: AppTextStyle.bold.copyWith(fontSize: 11, color: text)),
     );
+  }
+
+  Map<String, dynamic> _getVendorTypeInfo(String? type) {
+    switch (type) {
+      case 'hotel':
+        return {'label': 'Hotel', 'bg': _lightTeal, 'text': _teal};
+      case 'activity_provider':
+        return {'label': 'Activity', 'bg': _purpleBg, 'text': _purpleText};
+      case 'transport':
+        return {'label': 'Transport', 'bg': _orangeBg, 'text': _orangeText};
+      default:
+        return {'label': 'Vendor', 'bg': _lightTeal, 'text': _teal};
+    }
   }
 
   Map<String, dynamic> _getRoleInfo(String? role) {

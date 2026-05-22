@@ -2,13 +2,19 @@ import 'dart:convert';
 import '../../app_export.dart';
 
 class MasterController extends GetxController {
+  Future<void>? _envLoadFuture;
+
   @override
   void onInit() {
-    _readEnvironment();
     super.onInit();
+    ensureEnvironmentLoaded();
   }
 
   final RxMap<String, String> localEnvJson = <String, String>{}.obs, liveEnvJson = <String, String>{}.obs;
+
+  Future<void> ensureEnvironmentLoaded() {
+    return _envLoadFuture ??= _readEnvironment();
+  }
 
   Future<void> _readEnvironment() async {
     try {

@@ -149,7 +149,8 @@ class HomeController extends GetxController {
       log(response.status.toString());
       log(response.data.toString());
       if ((response.status == 1 || response.status == 200) &&
-          response.success == true) {
+          response.success == true &&
+          response.data != null) {
         final bookingData = BookingResponseData.fromJson(response.data);
         log('=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=');
         log(bookingData.bookings.toString());

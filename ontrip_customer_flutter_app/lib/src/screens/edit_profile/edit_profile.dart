@@ -86,7 +86,7 @@ class EditProfileScreen extends GetView<EditProfileCtrl> {
           ),
           GestureDetector(
             onTap: () {
-              // TODO: Implement image picker
+             
             },
             child: Container(
               padding: const EdgeInsets.all(8),

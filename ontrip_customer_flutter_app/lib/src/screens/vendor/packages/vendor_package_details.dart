@@ -1,5 +1,6 @@
+import 'package:readmore/readmore.dart' show ReadMoreText;
+
 import '../../../../app_export.dart';
-import 'package:ontrip_customer_flutter_app/src/models/booking_model.dart';
 import '../home/vendor_home_ctrl.dart';
 
 class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
@@ -503,25 +504,36 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
               children: [
                 Container(
                   width: Get.width,
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
                   ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        dayData.title ?? "Day ${dayData.day}",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.bold.copyWith(fontSize: 24, color: const Color(0xFF1E293B)),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(dayData.title ?? "Day ${dayData.day}", style: AppTextStyle.bold.copyWith(fontSize: 24, color: const Color(0xFF1E293B))),
+                          ),
+                          if (dayData.date != null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(color: const Color(0xFF3B82F6).withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "${dayData.date!.day}/${dayData.date!.month}/${dayData.date!.year}",
+                                style: AppTextStyle.semiBold.copyWith(fontSize: 12, color: const Color(0xFF1D4ED8)),
+                              ),
+                            ),
+                        ],
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        dayData.description ?? "",
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.6),
-                      ),
+
+                      const SizedBox(height: 12),
+
+                      Text(dayData.description ?? "", style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.6)),
                     ],
                   ),
                 ),
@@ -578,13 +590,21 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 ],
               ),
             ),
+
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Expanded(
+                      child: Text(exp.name ?? "Experience", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B), height: 1.2)),
+                    ),
+
+                    const SizedBox(width: 8),
+
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
@@ -601,16 +621,17 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                         children: [
                           Icon(Icons.access_time_rounded, size: 16, color: const Color(0xFF3B82F6)),
                           const SizedBox(width: 6),
-                          Text("${exp.durationMinutes ?? 0} mins", style: AppTextStyle.bold.copyWith(color: const Color(0xFF1D4ED8), fontSize: 12)),
+                          Text(
+                            "${exp.startTime}${exp.endTime != null && exp.endTime!.isNotEmpty ? ' — ${exp.endTime}' : ''}",
+                            style: AppTextStyle.bold.copyWith(color: const Color(0xFF1D4ED8), fontSize: 12),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Text(exp.name ?? "Experience", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B), height: 1.2)),
                 const SizedBox(height: 12),
-                Text(exp.description ?? "", style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.5)),
+                Text(exp.description!.trim(), style: AppTextStyle.bold.copyWith(color: const Color(0xFF64748B), fontSize: 14)),
               ],
             ),
           ),
@@ -629,7 +650,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       itemCount: bookings.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        final booking = bookings[index] as Booking;
+        final booking = bookings[index];
         final customer = booking.customer;
         return Container(
           padding: const EdgeInsets.all(16),

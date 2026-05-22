@@ -8,8 +8,11 @@ class BACKEND {
   static const vendorSignIn = 'vendors/mobile/verify-otp';
   static const vendorProfile = 'vendors/mobile/profile';
   static const vendorPackages = 'vendors/mobile/packages';
-  static String vendorChat(String bookingId, String customerId) =>
-      'vendors/chat/$bookingId?customerId=$customerId';
+  /// GET messages + community for vendor chat
+  static String vendorChatGet(String bookingId, String customerId) => 'vendors/chat/$bookingId?customerId=$customerId';
+
+  /// POST text/image message (customerId in form body)
+  static String vendorChatPost(String bookingId) => 'vendors/chat/$bookingId';
 
   static const deleteAccount = 'mobile/delete-account';
 

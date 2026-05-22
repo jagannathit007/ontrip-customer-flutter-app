@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:file_picker/file_picker.dart';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:gal/gal.dart';
@@ -52,12 +50,40 @@ class CommunityCtrl extends GetxController {
             return;
           }
           final list = (dataMap['packages'] as List<dynamic>? ?? []);
-          final fakeBookings = list.map((p) {
+          final vendorBookings = <Booking>[];
+          for (final p in list) {
             final pMap = p is Map<String, dynamic> ? p : Map<String, dynamic>.from(p as Map);
-            return Booking(bookingId: pMap['_id'], package: Package.fromJson(pMap));
-          }).toList();
-          bookings.assignAll(fakeBookings);
-        } else {
+            final package = Package.fromJson(pMap);
+            final nested = pMap['bookings'] as List<dynamic>? ?? [];
+            for (final b in nested) {
+              if (b is! Map) continue;
+              final bMap = Map<String, dynamic>.from(b);
+              final parsed = Booking.fromJson(bMap);
+              vendorBookings.add(
+                Booking(
+                  id: parsed.id,
+                  bookingId: parsed.bookingId,
+                  package: parsed.package?.title != null ? parsed.package : package,
+                  whitelabelPackage: parsed.whitelabelPackage,
+                  bookedBy: parsed.bookedBy,
+                  customer: parsed.customer,
+                  agencyCustomer: parsed.agencyCustomer,
+                  travelers: parsed.travelers,
+                  travelerCount: parsed.travelerCount,
+                  travelDate: parsed.travelDate,
+                  totalAmount: parsed.totalAmount,
+                  paymentStatus: parsed.paymentStatus,
+                  bookingStatus: parsed.bookingStatus,
+                  currentDay: parsed.currentDay,
+                  tickets: parsed.tickets,
+                  createdAt: parsed.createdAt,
+                  updatedAt: parsed.updatedAt,
+                ),
+              );
+            }
+          }
+          bookings.assignAll(vendorBookings);
+        } else if (response.data != null) {
           final bookingData = BookingResponseData.fromJson(response.data);
           bookings.assignAll(bookingData.bookings ?? []);
         }
@@ -73,31 +99,25 @@ class CommunityCtrl extends GetxController {
     final isVendor = getStorage(AppSession.userRole) == 'vendor';
 
     if (isVendor) {
-      final bookingId = booking?.bookingId;
-      if (bookingId == null || bookingId.isEmpty) return;
+      // Vendor chat API expects Mongo booking _id, not package id or TRP bookingId string.
+      final bookingMongoId = booking?.id;
+      if (bookingMongoId == null || bookingMongoId.isEmpty) return;
 
-      // Use booking's customer id if available, otherwise fall back to the
-      // logged-in vendor's own _id from their profile.
       final customerId = (booking?.customer?.id?.isNotEmpty == true)
           ? booking!.customer!.id!
-          : (Get.find<AuthenticationController>().userAuthData['_id'] ?? '').toString();
+          : (booking?.agencyCustomer?.id?.isNotEmpty == true)
+          ? booking!.agencyCustomer!.id!
+          : '';
+
+      if (customerId.isEmpty) return;
 
       Get.toNamed(
         RouteNames.communityChat,
-        arguments: {
-          "isVendor": true,
-          "packageId": packageId,
-          "bookingId": bookingId,
-          "customerId": customerId,
-          "coverImage": coverImage,
-        },
+        arguments: {"isVendor": true, "packageId": packageId, "bookingId": bookingMongoId, "customerId": customerId, "coverImage": coverImage},
       );
     } else {
       if (packageId == null || packageId.isEmpty) return;
-      Get.toNamed(
-        RouteNames.communityChat,
-        arguments: {"packageId": packageId, "coverImage": coverImage},
-      );
+      Get.toNamed(RouteNames.communityChat, arguments: {"packageId": packageId, "coverImage": coverImage});
     }
   }
 
