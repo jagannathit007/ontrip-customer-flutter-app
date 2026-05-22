@@ -34,6 +34,8 @@ class SettingsScreen extends StatelessWidget {
                           value: controller.isNotificationEnabled.value,
                           onChanged: controller.toggleNotification,
                           activeColor: Constant.instance.primary,
+                          inactiveThumbColor: Constant.instance.white,
+                          inactiveTrackColor: Constant.instance.grey400,
                         ),
                       ),
                     ),

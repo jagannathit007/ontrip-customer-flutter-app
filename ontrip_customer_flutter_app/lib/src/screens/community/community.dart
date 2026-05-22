@@ -1,4 +1,5 @@
 import '../../../../../app_export.dart';
+import 'community_ctrl.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
@@ -33,6 +34,8 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<CommunityCtrl>();
+    final isVendor = getStorage(AppSession.userRole) == 'vendor';
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: SafeArea(
@@ -44,12 +47,29 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHeader(),
-              _buildStatsSection(controller),
+              if (!isVendor) _buildStatsSection(controller),
               Expanded(
                 child: Obx(() {
                   if (controller.isLoading.value) {
                     return const Center(child: CustomLoadingIndicator());
                   }
+
+                  if (isVendor) {
+                    if (controller.vendorGroups.isEmpty) {
+                      return _buildEmptyState();
+                    }
+                    return RefreshIndicator(
+                      onRefresh: controller.fetchBookings,
+                      color: Constant.instance.primary,
+                      backgroundColor: Colors.white,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+                        itemCount: controller.vendorGroups.length,
+                        itemBuilder: (context, index) => _buildVendorGroup(controller.vendorGroups[index], controller),
+                      ),
+                    );
+                  }
+
                   if (controller.bookings.isEmpty) {
                     return _buildEmptyState();
                   }
@@ -76,6 +96,133 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
         ),
       ),
     );
+  }
+
+  // ── Vendor grouped card ──────────────────────────────────────────────────
+
+  Widget _buildVendorGroup(VendorPackageGroup group, CommunityCtrl ctrl) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 16, offset: const Offset(0, 4))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Group header ──────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${group.title} — ${group.destination}', style: AppTextStyle.bold.copyWith(fontSize: 15, color: const Color(0xFF1E293B))),
+                      const SizedBox(height: 8),
+                      Wrap(spacing: 6, runSpacing: 6, children: [
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+
+                GestureDetector(
+                  onTap: () => Get.toNamed(RouteNames.communityChat, arguments: {"packageId": group.packageId, "coverImage": group.coverImage}),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Constant.instance.primary.withValues(alpha: 0.4)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chat_bubble_outline_rounded, size: 13, color: Constant.instance.primary),
+                        const SizedBox(width: 5),
+                        Text('Community', style: AppTextStyle.medium.copyWith(fontSize: 12, color: Constant.instance.primary)),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const Divider(height: 1, color: Color(0xFFE2E8F0)),
+
+          // ── Booking rows ──────────────────────────────────────
+          ...group.bookings.map((booking) => _buildVendorBookingRow(booking, group, ctrl)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVendorBookingRow(Booking booking, VendorPackageGroup group, CommunityCtrl ctrl) {
+    final travelDate = booking.travelDate != null ? '${booking.travelDate!.day} ${_monthName(booking.travelDate!.month)}' : '';
+    final customerName = booking.customer?.name ?? booking.agencyCustomer?.name ?? '';
+    final bookingId = booking.bookingId ?? '';
+    final day = booking.currentDay ?? 1;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(customerName, style: AppTextStyle.medium.copyWith(fontSize: 16, color: const Color(0xFF475569))),
+                    const SizedBox(width: 8),
+                    Text(bookingId, style: AppTextStyle.medium.copyWith(fontSize: 12, color: const Color(0xFF475569))),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => ctrl.navigateToChat(group.packageId, group.coverImage, booking: booking),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF1F5F9),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.chat_bubble_outline_rounded, size: 14, color: Color(0xFF64748B)),
+                      const SizedBox(width: 4),
+                      Text('Chat', style: AppTextStyle.medium.copyWith(fontSize: 13, color: const Color(0xFF64748B))),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(height: 1, color: Color(0xFFF1F5F9), indent: 16, endIndent: 16),
+      ],
+    );
+  }
+
+  Widget _chip(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(20)),
+      child: Text(label, style: AppTextStyle.medium.copyWith(fontSize: 12, color: const Color(0xFF64748B))),
+    );
+  }
+
+  String _monthName(int month) {
+    const months = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month];
   }
 
   Widget _buildHeader() {

@@ -236,7 +236,7 @@ class CommunityChatCtrl extends GetxController {
     // });
   }
   // Future<void> initCommunity() async {
-  //   try {
+  //   try { 6a0fe6168dcf6ff188be0a9b
   //     isLoading.value = true;
 
   //     String? packageId = Get.arguments;

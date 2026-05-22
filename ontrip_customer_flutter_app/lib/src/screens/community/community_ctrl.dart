@@ -1,16 +1,43 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:gal/gal.dart';
 import '../../../../../app_export.dart';
+
+/// Holds one vendor package group with its nested bookings.
+class VendorPackageGroup {
+  final String packageId;
+  final String title;
+  final String destination;
+  final String coverImage;
+  final int totalDays;
+  final String firstActivityName;
+  final List<Booking> bookings;
+
+  VendorPackageGroup({
+    required this.packageId,
+    required this.title,
+    required this.destination,
+    required this.coverImage,
+    required this.totalDays,
+    required this.firstActivityName,
+    required this.bookings,
+  });
+}
 
 class CommunityCtrl extends GetxController {
   final Rxn<Community> community = Rxn<Community>();
   final RxList<CommunityMessage> messages = <CommunityMessage>[].obs;
   final RxBool isLoading = false.obs;
   final RxList<Booking> bookings = <Booking>[].obs;
+
+  /// Vendor-only: packages grouped with their bookings.
+  final RxList<VendorPackageGroup> vendorGroups = <VendorPackageGroup>[].obs;
+
   final RxBool isSending = false.obs;
   final RxList<XFile> selectedImages = <XFile>[].obs;
   final RxList<XFile> selectedVideos = <XFile>[].obs;
@@ -34,11 +61,15 @@ class CommunityCtrl extends GetxController {
     try {
       isLoading.value = true;
       final isVendor = getStorage(AppSession.userRole) == 'vendor';
-      final endpoint = isVendor ? BACKEND.vendorPackages : BACKEND.bookings;
-      final response = await ApiManager.call(endPoint: endpoint, type: ApiType.get);
 
-      if ((response.status == 1 || response.status == 200) && response.success == true) {
-        if (isVendor) {
+      if (isVendor) {
+        final response = await ApiManager.call(
+          endPoint: BACKEND.vendorPackages,
+          type: ApiType.get,
+        );
+
+        if ((response.status == 1 || response.status == 200) &&
+            response.success == true) {
           final rawData = response.data;
           Map<String, dynamic>? dataMap;
           if (rawData is Map<String, dynamic>) {
@@ -46,44 +77,75 @@ class CommunityCtrl extends GetxController {
           } else if (rawData is Map) {
             dataMap = Map<String, dynamic>.from(rawData);
           } else {
-            debugPrint('Vendor packages: unexpected data type ${rawData.runtimeType}: $rawData');
+            debugPrint('Vendor packages: unexpected type ${rawData.runtimeType}');
             return;
           }
-          final list = (dataMap['packages'] as List<dynamic>? ?? []);
-          final vendorBookings = <Booking>[];
-          for (final p in list) {
-            final pMap = p is Map<String, dynamic> ? p : Map<String, dynamic>.from(p as Map);
-            final package = Package.fromJson(pMap);
-            final nested = pMap['bookings'] as List<dynamic>? ?? [];
-            for (final b in nested) {
+
+          final packageList = dataMap['packages'] as List<dynamic>? ?? [];
+          final groups = <VendorPackageGroup>[];
+
+          for (final p in packageList) {
+            final pMap = p is Map<String, dynamic>
+                ? p
+                : Map<String, dynamic>.from(p as Map);
+
+            final packageId = pMap['_id'] as String? ?? '';
+            final title = pMap['title'] as String? ?? '';
+            final destination = pMap['destination'] as String? ?? '';
+            final coverImg = pMap['coverImage'] as String? ?? '';
+            final totalDays = (pMap['totalDays'] as num?)?.toInt() ?? 1;
+
+            // First activity name from day 1
+            String firstActivity = '';
+            final itinerary = pMap['itinerary'] as List<dynamic>? ?? [];
+            if (itinerary.isNotEmpty) {
+              final day1 = itinerary.first as Map?;
+              final experiences = day1?['experiences'] as List<dynamic>? ?? [];
+              if (experiences.isNotEmpty) {
+                final exp = experiences.first as Map?;
+                firstActivity = exp?['name'] as String? ?? '';
+              }
+            }
+
+            // Parse nested bookings
+            final rawBookings = pMap['bookings'] as List<dynamic>? ?? [];
+            final parsedBookings = <Booking>[];
+            for (final b in rawBookings) {
               if (b is! Map) continue;
-              final bMap = Map<String, dynamic>.from(b);
-              final parsed = Booking.fromJson(bMap);
-              vendorBookings.add(
-                Booking(
-                  id: parsed.id,
-                  bookingId: parsed.bookingId,
-                  package: parsed.package?.title != null ? parsed.package : package,
-                  whitelabelPackage: parsed.whitelabelPackage,
-                  bookedBy: parsed.bookedBy,
-                  customer: parsed.customer,
-                  agencyCustomer: parsed.agencyCustomer,
-                  travelers: parsed.travelers,
-                  travelerCount: parsed.travelerCount,
-                  travelDate: parsed.travelDate,
-                  totalAmount: parsed.totalAmount,
-                  paymentStatus: parsed.paymentStatus,
-                  bookingStatus: parsed.bookingStatus,
-                  currentDay: parsed.currentDay,
-                  tickets: parsed.tickets,
-                  createdAt: parsed.createdAt,
-                  updatedAt: parsed.updatedAt,
-                ),
-              );
+              final bMap = b is Map<String, dynamic>
+                  ? b
+                  : Map<String, dynamic>.from(b);
+              try {
+                parsedBookings.add(Booking.fromJson(bMap));
+              } catch (e) {
+                debugPrint('Error parsing booking: $e');
+              }
+            }
+
+            // Only include packages that have bookings
+            if (parsedBookings.isNotEmpty) {
+              groups.add(VendorPackageGroup(
+                packageId: packageId,
+                title: title,
+                destination: destination,
+                coverImage: coverImg,
+                totalDays: totalDays,
+                firstActivityName: firstActivity,
+                bookings: parsedBookings,
+              ));
             }
           }
-          bookings.assignAll(vendorBookings);
-        } else if (response.data != null) {
+
+          vendorGroups.assignAll(groups);
+        }
+      } else {
+        final response = await ApiManager.call(
+          endPoint: BACKEND.bookings,
+          type: ApiType.get,
+        );
+        if ((response.status == 1 || response.status == 200) &&
+            response.success == true &&
+            response.data != null) {
           final bookingData = BookingResponseData.fromJson(response.data);
           bookings.assignAll(bookingData.bookings ?? []);
         }
@@ -95,29 +157,39 @@ class CommunityCtrl extends GetxController {
     }
   }
 
-  void navigateToChat(String? packageId, String? coverImage, {Booking? booking}) {
+  void navigateToChat(String? packageId, String? coverImageUrl,
+      {Booking? booking}) {
     final isVendor = getStorage(AppSession.userRole) == 'vendor';
 
     if (isVendor) {
-      // Vendor chat API expects Mongo booking _id, not package id or TRP bookingId string.
       final bookingMongoId = booking?.id;
       if (bookingMongoId == null || bookingMongoId.isEmpty) return;
 
       final customerId = (booking?.customer?.id?.isNotEmpty == true)
           ? booking!.customer!.id!
           : (booking?.agencyCustomer?.id?.isNotEmpty == true)
-          ? booking!.agencyCustomer!.id!
-          : '';
-
-      if (customerId.isEmpty) return;
+              ? booking!.agencyCustomer!.id!
+              : (Get.find<AuthenticationController>()
+                      .userAuthData['_id']
+                      ?.toString() ??
+                  '');
 
       Get.toNamed(
         RouteNames.communityChat,
-        arguments: {"isVendor": true, "packageId": packageId, "bookingId": bookingMongoId, "customerId": customerId, "coverImage": coverImage},
+        arguments: {
+          "isVendor": true,
+          "packageId": packageId,
+          "bookingId": bookingMongoId,
+          "customerId": customerId,
+          "coverImage": coverImageUrl,
+        },
       );
     } else {
       if (packageId == null || packageId.isEmpty) return;
-      Get.toNamed(RouteNames.communityChat, arguments: {"packageId": packageId, "coverImage": coverImage});
+      Get.toNamed(
+        RouteNames.communityChat,
+        arguments: {"packageId": packageId, "coverImage": coverImageUrl},
+      );
     }
   }
 
