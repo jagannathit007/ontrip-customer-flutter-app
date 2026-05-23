@@ -116,7 +116,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
         return _buildEmptyState();
       }
 
-      return NotificationListener<ScrollNotification>(
+      return NotificationListener<ScrollNotification>( 
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
             controller.loadMore();

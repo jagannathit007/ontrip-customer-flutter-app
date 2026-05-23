@@ -1,4 +1,5 @@
 
+
 import '../../app_export.dart';
 
 class RouteMethods {
@@ -16,5 +17,6 @@ class RouteMethods {
     GetPage(name: RouteNames.communityMedia, page: () => const CommunityMediaScreen(), binding: BindingsBuilder(() => Get.lazyPut(() => CommunityMediaCtrl()))),
     GetPage(name: RouteNames.bookingDetails, page: () => const BookingDetailsScreen(), binding: BindingsBuilder(() => Get.lazyPut(() => BookingDetailsCtrl()))),
     GetPage(name: RouteNames.vendorPackageDetails, page: () => const VendorPackageDetailsScreen(), binding: BindingsBuilder(() => Get.lazyPut(() => VendorPackageDetailsCtrl()))),
+    GetPage(name: RouteNames.notifications, page: () => const NotificationsScreen(), binding: BindingsBuilder(() => Get.lazyPut(() => NotificationCtrl()))),
   ];
 }

@@ -96,6 +96,58 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                           ],
                         ),
                       ),
+                      // Notification Icon with Badge
+                      Builder(
+                        builder: (context) {
+                          // Initialize notification controller if not already registered
+                          if (!Get.isRegistered<NotificationCtrl>()) {
+                            Get.put(NotificationCtrl());
+                          }
+                          final notificationCtrl = Get.find<NotificationCtrl>();
+                          
+                          return GestureDetector(
+                            onTap: () => Get.toNamed(RouteNames.notifications),
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  const Icon(Icons.notifications_outlined, color: Colors.white, size: 24),
+                                  Obx(() {
+                                    if (notificationCtrl.unreadCount.value > 0) {
+                                      return Positioned(
+                                        right: -4,
+                                        top: -4,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFEF4444),
+                                            shape: BoxShape.circle,
+                                            border: Border.all(color: Constant.instance.primary, width: 2),
+                                          ),
+                                          constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                                          child: Center(
+                                            child: Text(
+                                              notificationCtrl.unreadCount.value > 99 ? '99+' : '${notificationCtrl.unreadCount.value}',
+                                              style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 9),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),

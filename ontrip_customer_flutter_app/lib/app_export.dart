@@ -123,6 +123,9 @@ export 'src/screens/splash/splash.dart';
 export 'src/screens/dashboard/pages/home/home.dart';
 export 'src/screens/dashboard/pages/home/home_controller.dart';
 
+export 'src/screens/notifications/notification_ctrl.dart';
+export 'src/screens/notifications/notifications_screen.dart';
+
 export 'src/common/custom_bottom_nav_bar.dart';
 
 export 'src/screens/dashboard/dashboard.dart';

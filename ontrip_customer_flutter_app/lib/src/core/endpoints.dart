@@ -14,6 +14,18 @@ class BACKEND {
   /// POST text/image message (customerId in form body)
   static String vendorChatPost(String bookingId) => 'vendors/chat/$bookingId';
 
+  /// Notifications — Customer
+  static const customerNotifications = 'customer/notifications';
+  static const customerNotificationsUnreadCount = 'customer/notifications/unread-count';
+  static const customerNotificationsReadAll = 'customer/notifications/read-all';
+  static String customerNotificationMarkRead(String id) => 'customer/notifications/$id/read';
+
+  /// Notifications — Vendor
+  static const vendorNotifications = 'vendors/notifications';
+  static const vendorNotificationsUnreadCount = 'vendors/notifications/unread-count';
+  static const vendorNotificationsReadAll = 'vendors/notifications/read-all';
+  static String vendorNotificationMarkRead(String id) => 'vendors/notifications/$id/read';
+
   static const deleteAccount = 'mobile/delete-account';
 
   static const banners = 'mobile/banners';

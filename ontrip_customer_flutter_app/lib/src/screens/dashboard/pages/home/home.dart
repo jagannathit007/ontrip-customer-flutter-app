@@ -1,4 +1,3 @@
-
 import '../../../../../app_export.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -1257,6 +1256,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       final authCtrl = Get.find<AuthenticationController>();
       final name = authCtrl.userAuthData['name'] ?? "User";
 
+      // Initialize notification controller if not already registered
+      if (!Get.isRegistered<NotificationCtrl>()) {
+        Get.put(NotificationCtrl());
+      }
+      final notificationCtrl = Get.find<NotificationCtrl>();
+
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(24, 50, 24, 20),
@@ -1285,27 +1290,46 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       shadows: [Shadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10)],
                     ),
                   ),
-                  // const SizedBox(height: 8),
-                  // // Subtitle
-                  // Container(
-                  //   padding: const EdgeInsets.symmetric(
-                  //     horizontal: 12,
-                  //     vertical: 6,
-                  //   ),
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.white.withValues(alpha: 0.2),
-                  //     borderRadius: BorderRadius.circular(8),
-                  //   ),
-                  //   child: Text(
-                  //     "Your Travel Dashboard",
-                  //     style: AppTextStyle.medium.copyWith(
-                  //       color: Colors.white.withValues(alpha: 0.9),
-                  //       fontSize: 12,
-                  //       letterSpacing: 0.5,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
+              ),
+            ),
+            // Notification Icon with Badge
+            GestureDetector(
+              onTap: () => Get.toNamed(RouteNames.notifications),
+              child: Container(
+                margin: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Icon(Icons.notifications_outlined, color: Colors.white, size: 28),
+                    Obx(() {
+                      if (notificationCtrl.unreadCount.value > 0) {
+                        return Positioned(
+                          right: -5,
+                          top: -6,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEF4444),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Constant.instance.primary, width: 2),
+                            ),
+                            constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                            child: Center(
+                              child: Text(
+                                notificationCtrl.unreadCount.value > 9 ? '9+' : '${notificationCtrl.unreadCount.value}',
+                                style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                  ],
+                ),
               ),
             ),
             // Enhanced Profile Avatar
