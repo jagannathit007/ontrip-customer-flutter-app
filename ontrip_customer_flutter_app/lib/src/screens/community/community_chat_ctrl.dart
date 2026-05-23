@@ -152,14 +152,8 @@ class CommunityChatCtrl extends GetxController {
     communityId = bookingRef ?? currentBookingId;
     community.value = Community(
       id: communityId,
-      package: CommunityPackage(
-        id: bookingRef,
-        title: bookingLabel ?? customerName ?? 'Vendor Chat',
-        destination: customerName,
-      ),
-      customerMembers: customerName != null
-          ? [CustomerMember(id: currentCustomerId, name: customerName)]
-          : null,
+      package: CommunityPackage(id: bookingRef, title: bookingLabel ?? customerName ?? 'Vendor Chat', destination: customerName),
+      customerMembers: customerName != null ? [CustomerMember(id: currentCustomerId, name: customerName)] : null,
     );
   }
 
@@ -403,6 +397,29 @@ class CommunityChatCtrl extends GetxController {
     final List<XFile> picked = await _picker.pickMultipleMedia(maxHeight: 80, maxWidth: 80, imageQuality: 80);
     if (picked.isEmpty) return;
     selectedImages.addAll(picked);
+  }
+
+  Future<void> pickMediaFromCamera({bool isVideo = false}) async {
+    try {
+      XFile? pickedFile;
+
+      if (isVideo) {
+        pickedFile = await _picker.pickVideo(source: ImageSource.camera);
+
+        if (pickedFile != null) {
+          selectedVideos.add(pickedFile);
+        }
+      } else {
+        pickedFile = await _picker.pickImage(source: ImageSource.camera, imageQuality: 80, maxWidth: 1080, maxHeight: 1080);
+
+        if (pickedFile != null) {
+          selectedImages.add(pickedFile);
+        }
+      }
+    } catch (e) {
+      debugPrint("Camera pick error: $e");
+      errorToast("Couldn't open camera");
+    }
   }
 
   Future<void> pickMedia() async {

@@ -256,6 +256,74 @@ class CommunityChatScreen extends StatelessWidget {
     );
   }
 
+  void _showMediaPickerOptions(CommunityChatCtrl controller) {
+    Get.bottomSheet(
+      SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          decoration: const BoxDecoration(
+            color: AppThemeColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 50,
+                height: 5,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(20)),
+              ),
+
+              /// Camera Photo
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+                  child: const Icon(Icons.camera_alt_rounded, color: AppThemeColors.primaryOrange),
+                ),
+                title: const Text("Take Photo"),
+                onTap: () async {
+                  Get.back();
+                  await controller.pickMediaFromCamera();
+                },
+              ),
+
+              /// Camera Video
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Colors.red.withValues(alpha: 0.1), shape: BoxShape.circle),
+                  child: const Icon(Icons.videocam_rounded, color: Colors.red),
+                ),
+                title: const Text("Record Video"),
+                onTap: () async {
+                  Get.back();
+                  await controller.pickMediaFromCamera(isVideo: true);
+                },
+              ),
+
+              /// Gallery
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: AppThemeColors.success.withValues(alpha: 0.1), shape: BoxShape.circle),
+                  child: const Icon(Icons.photo_library_rounded, color: AppThemeColors.success),
+                ),
+                title: const Text("Choose from Gallery"),
+                onTap: () async {
+                  Get.back();
+                  // await controller.pickMedia();
+                  _showMediaPickerOptions(controller);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildAvatar(String name, {required bool isMe}) {
     return Container(
       height: 36,
