@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import 'package:ontrip_customer_flutter_app/src/helper/decoration.dart';
 
 import '../../../app_export.dart';
@@ -15,7 +16,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8), Colors.white],
+            colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8), AppThemeColors.bgCream],
             stops: [0.0, 0.6, 1.0],
           ),
         ),
@@ -44,8 +45,8 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 10))],
+                            color: AppThemeColors.white,
+                            boxShadow: AppThemeStyles.shadowLarge,
                           ),
                           child: Container(
                             height: 90,
@@ -55,7 +56,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: [decoration.colorScheme.primary, decoration.colorScheme.primary.withValues(alpha: 0.5)],
+                                colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.5)],
                               ),
                               image: DecorationImage(image: AssetImage(Graphics.instance.logo), fit: BoxFit.cover),
                             ),
@@ -76,7 +77,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                         opacity: value,
                         child: Text(
                           "On Trip",
-                          style: AppTextStyle.bold.copyWith(fontSize: 28, color: Colors.white, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+                          style: AppTextStyle.bold.copyWith(fontSize: 28, color: AppThemeColors.white, fontWeight: FontWeight.w700, letterSpacing: 0.5),
                         ),
                       ),
                     );
@@ -93,7 +94,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                         opacity: value,
                         child: Text(
                           "Your Digital Way to Find Trip",
-                          style: AppTextStyle.medium.copyWith(fontSize: 16, color: Colors.white.withValues(alpha: 0.9), fontWeight: FontWeight.w400),
+                          style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.white.withValues(alpha: 0.9), fontWeight: FontWeight.w400),
                         ),
                       ),
                     );
@@ -109,8 +110,8 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 60),
                         child: LinearProgressIndicator(
-                          backgroundColor: Colors.white.withValues(alpha: 0.3),
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          backgroundColor: AppThemeColors.white.withValues(alpha: 0.3),
+                          valueColor: AlwaysStoppedAnimation<Color>(AppThemeColors.white),
                           minHeight: 3,
                         ),
                       ),
@@ -126,13 +127,13 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                       opacity: value,
                       child: Column(
                         children: [
-                          Container(height: 1, width: 60, color: Colors.white.withValues(alpha: 0.4)),
+                          Container(height: 1, width: 60, color: AppThemeColors.white.withValues(alpha: 0.4)),
                           const SizedBox(height: 15),
                           CustomRichText(
                             text1: "Powered by ",
                             text2: "ITFuturz",
-                            style1: AppTextStyle.medium.copyWith(fontSize: 14, color: Colors.white.withValues(alpha: 0.8), fontWeight: FontWeight.w400),
-                            style2: AppTextStyle.bold.copyWith(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w600, letterSpacing: 0.3),
+                            style1: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.white.withValues(alpha: 0.8), fontWeight: FontWeight.w400),
+                            style2: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.white, fontWeight: FontWeight.w600, letterSpacing: 0.3),
                           ),
                           const SizedBox(height: 30),
                         ],
@@ -154,7 +155,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                     child: Container(
                       width: 200,
                       height: 200,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withValues(alpha: 0.05)),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppThemeColors.white.withValues(alpha: 0.05)),
                     ),
                   );
                 },
@@ -172,7 +173,7 @@ class SplashScreen extends GetWidget<SplashCtrl> {
                     child: Container(
                       width: 250,
                       height: 250,
-                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white.withValues(alpha: 0.03)),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: AppThemeColors.white.withValues(alpha: 0.03)),
                     ),
                   );
                 },

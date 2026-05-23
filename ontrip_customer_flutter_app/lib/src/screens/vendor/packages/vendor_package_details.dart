@@ -1,4 +1,5 @@
 import 'package:readmore/readmore.dart' show ReadMoreText;
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 
 import '../../../../app_export.dart';
 import '../home/vendor_home_ctrl.dart';
@@ -9,20 +10,20 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppThemeColors.bgCream,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppThemeColors.white,
         elevation: 0,
-        surfaceTintColor: Colors.white,
-        shadowColor: Colors.black.withValues(alpha: 0.1),
+        surfaceTintColor: AppThemeColors.white,
+        shadowColor: AppThemeColors.shadowLight.withValues(alpha: 0.1),
         scrolledUnderElevation: 8,
-        title: Text("Package Details", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B))),
+        title: Text("Package Details", style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.blackText)),
         centerTitle: true,
         leading: Container(
           margin: const EdgeInsets.all(8),
           child: IconButton(
             onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF64748B), size: 16),
+            icon: Icon(Icons.arrow_back_ios_new, color: AppThemeColors.greyText, size: 16),
           ),
         ),
       ),
@@ -32,9 +33,9 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
           child: Column(
             children: [
               TabBar(
-                labelColor: Constant.instance.primary,
-                unselectedLabelColor: Colors.grey,
-                indicatorColor: Constant.instance.primary,
+                labelColor: AppThemeColors.primaryOrange,
+                unselectedLabelColor: AppThemeColors.greyText,
+                indicatorColor: AppThemeColors.primaryOrange,
                 tabs: const [
                   Tab(text: 'Details'),
                   Tab(text: 'Customers'),
@@ -73,9 +74,9 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       child: Center(
         child: Column(
           children: [
-            Icon(icon, size: 48, color: Colors.grey.shade300),
+            Icon(icon, size: 48, color: AppThemeColors.borderMedium),
             const SizedBox(height: 12),
-            Text(message, style: AppTextStyle.medium.copyWith(fontSize: 14, color: Colors.grey.shade400)),
+            Text(message, style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText)),
           ],
         ),
       ),
@@ -89,22 +90,19 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       width: double.infinity,
       height: 240,
       margin: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 20, offset: const Offset(0, 8))],
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge), boxShadow: AppThemeStyles.shadowMedium),
       child: Stack(
         children: [
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge),
               child: CustomNetworkImage(imageUrl: coverImage.startsWith("http") ? coverImage : "${AppNetworkConstants.baseURL}$coverImage", fit: BoxFit.cover),
             ),
           ),
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -127,7 +125,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [BoxShadow(color: _getStatusColor(package.status.toUpperCase()).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
               ),
-              child: Text(package.status.toUpperCase(), style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 12, letterSpacing: 0.5)),
+              child: Text(package.status.toUpperCase(), style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 12, letterSpacing: 0.5)),
             ),
           ),
           Positioned(
@@ -140,7 +138,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 Text(
                   package.title,
                   style: AppTextStyle.bold.copyWith(
-                    color: Colors.white,
+                    color: AppThemeColors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     shadows: [Shadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 8)],
@@ -153,13 +151,13 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.location_on_rounded, color: Colors.white, size: 16),
+                          Icon(Icons.location_on_rounded, color: AppThemeColors.white, size: 16),
                           const SizedBox(width: 4),
-                          Text(package.destination, style: AppTextStyle.medium.copyWith(color: Colors.white, fontSize: 14)),
+                          Text(package.destination, style: AppTextStyle.medium.copyWith(color: AppThemeColors.white, fontSize: 14)),
                         ],
                       ),
                     ),
@@ -177,14 +175,14 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
     switch (status?.toLowerCase()) {
       case 'approved':
       case 'active':
-        return const Color(0xFF10B981);
+        return AppThemeColors.success;
       case 'pending':
-        return const Color(0xFFF59E0B);
+        return AppThemeColors.warning;
       case 'rejected':
       case 'cancelled':
-        return const Color(0xFFEF4444);
+        return AppThemeColors.error;
       default:
-        return const Color(0xFF64748B);
+        return AppThemeColors.greyText;
     }
   }
 
@@ -196,9 +194,9 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 32),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
+        boxShadow: AppThemeStyles.shadowLight,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,11 +205,11 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: Constant.instance.green2.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.check_circle_rounded, color: Constant.instance.green2, size: 20),
+                decoration: BoxDecoration(color: AppThemeColors.success.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                child: Icon(Icons.check_circle_rounded, color: AppThemeColors.success, size: 20),
               ),
               const SizedBox(width: 12),
-              Text("PACKAGE INCLUSIONS", style: AppTextStyle.bold.copyWith(fontSize: 14, color: Constant.instance.green2, letterSpacing: 0.5)),
+              Text("PACKAGE INCLUSIONS", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.success, letterSpacing: 0.5)),
             ],
           ),
           const SizedBox(height: 20),
@@ -220,16 +218,16 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Constant.instance.green2.withValues(alpha: 0.05),
+                color: AppThemeColors.success.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Constant.instance.green2.withValues(alpha: 0.1)),
+                border: Border.all(color: AppThemeColors.success.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.check_circle_rounded, color: Constant.instance.green2, size: 18),
+                  Icon(Icons.check_circle_rounded, color: AppThemeColors.success, size: 18),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(item, style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B), height: 1.4)),
+                    child: Text(item, style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText, height: 1.4)),
                   ),
                 ],
               ),
@@ -248,9 +246,9 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 32),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
+        boxShadow: AppThemeStyles.shadowLight,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -259,11 +257,11 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: Constant.instance.red.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.cancel_rounded, color: Constant.instance.red, size: 20),
+                decoration: BoxDecoration(color: AppThemeColors.error.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                child: Icon(Icons.cancel_rounded, color: AppThemeColors.error, size: 20),
               ),
               const SizedBox(width: 12),
-              Text("PACKAGE EXCLUSIONS", style: AppTextStyle.bold.copyWith(fontSize: 14, color: Constant.instance.red, letterSpacing: 0.5)),
+              Text("PACKAGE EXCLUSIONS", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.error, letterSpacing: 0.5)),
             ],
           ),
           const SizedBox(height: 20),
@@ -272,16 +270,16 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
               margin: const EdgeInsets.only(bottom: 12),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Constant.instance.red.withValues(alpha: 0.05),
+                color: AppThemeColors.error.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Constant.instance.red.withValues(alpha: 0.1)),
+                border: Border.all(color: AppThemeColors.error.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.cancel_rounded, color: Constant.instance.red, size: 18),
+                  Icon(Icons.cancel_rounded, color: AppThemeColors.error, size: 18),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Text(item.toString(), style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B), height: 1.4)),
+                    child: Text(item.toString(), style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText, height: 1.4)),
                   ),
                 ],
               ),
@@ -301,9 +299,9 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 32),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
+        boxShadow: AppThemeStyles.shadowLight,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,11 +310,11 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.headset_mic_rounded, color: Constant.instance.primary, size: 20),
+                decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                child: Icon(Icons.headset_mic_rounded, color: AppThemeColors.primaryOrange, size: 20),
               ),
               const SizedBox(width: 12),
-              Text("SUPPORT & ASSISTANCE", style: AppTextStyle.bold.copyWith(fontSize: 14, color: Constant.instance.primary, letterSpacing: 0.5)),
+              Text("SUPPORT & ASSISTANCE", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.primaryOrange, letterSpacing: 0.5)),
             ],
           ),
           const SizedBox(height: 20),
@@ -329,13 +327,13 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                    colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                   ),
                   borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+                  boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
                 ),
                 child: Center(
-                  child: Text(supportName[0], style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 20)),
+                  child: Text(supportName[0], style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 20)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -343,16 +341,16 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(supportName, style: AppTextStyle.bold.copyWith(fontSize: 16, color: const Color(0xFF1E293B))),
+                    Text(supportName, style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                     const SizedBox(height: 4),
-                    Text("Contact your vendor support", style: AppTextStyle.medium.copyWith(fontSize: 13, color: const Color(0xFF64748B))),
+                    Text("Contact your vendor support", style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.greyText)),
                   ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 24),
-          const Divider(color: Color(0xFFF1F5F9), height: 1),
+          Divider(color: AppThemeColors.borderLight, height: 1),
           const SizedBox(height: 20),
           // Phone Row
           GestureDetector(
@@ -360,23 +358,23 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Constant.instance.green2.withValues(alpha: 0.05),
+                color: AppThemeColors.success.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Constant.instance.green2.withValues(alpha: 0.1)),
+                border: Border.all(color: AppThemeColors.success.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
                   Container(
                     height: 40,
                     width: 40,
-                    decoration: BoxDecoration(color: Constant.instance.green2.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(Icons.call_rounded, color: Constant.instance.green2, size: 20),
+                    decoration: BoxDecoration(color: AppThemeColors.success.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                    child: Icon(Icons.call_rounded, color: AppThemeColors.success, size: 20),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Text(supportPhone, style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B))),
+                    child: Text(supportPhone, style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText)),
                   ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Constant.instance.green2, size: 16),
+                  Icon(Icons.arrow_forward_ios_rounded, color: AppThemeColors.success, size: 16),
                 ],
               ),
             ),
@@ -388,23 +386,23 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Constant.instance.primary.withValues(alpha: 0.05),
+                color: AppThemeColors.primaryOrange.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Constant.instance.primary.withValues(alpha: 0.1)),
+                border: Border.all(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1)),
               ),
               child: Row(
                 children: [
                   Container(
                     height: 40,
                     width: 40,
-                    decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                    child: Icon(Icons.mail_rounded, color: Constant.instance.primary, size: 20),
+                    decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                    child: Icon(Icons.mail_rounded, color: AppThemeColors.primaryOrange, size: 20),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Text(supportEmail, style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B))),
+                    child: Text(supportEmail, style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText)),
                   ),
-                  Icon(Icons.arrow_forward_ios_rounded, color: Constant.instance.primary, size: 16),
+                  Icon(Icons.arrow_forward_ios_rounded, color: AppThemeColors.primaryOrange, size: 16),
                 ],
               ),
             ),
@@ -428,11 +426,11 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.map_rounded, color: Constant.instance.primary, size: 20),
+                decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
+                child: Icon(Icons.map_rounded, color: AppThemeColors.primaryOrange, size: 20),
               ),
               const SizedBox(width: 12),
-              Text("TRIP ITINERARY", style: AppTextStyle.bold.copyWith(fontSize: 14, color: Constant.instance.primary, letterSpacing: 0.5)),
+              Text("TRIP ITINERARY", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.primaryOrange, letterSpacing: 0.5)),
             ],
           ),
         ),
@@ -459,14 +457,14 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                           ? LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                              colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                             )
                           : null,
-                      color: isSelected ? null : Colors.white,
+                      color: isSelected ? null : AppThemeColors.white,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: isSelected ? Constant.instance.primary.withValues(alpha: 0.3) : Colors.black.withValues(alpha: 0.05),
+                          color: isSelected ? AppThemeColors.primaryOrange.withValues(alpha: 0.3) : AppThemeColors.shadowLight,
                           blurRadius: isSelected ? 8 : 5,
                           offset: const Offset(0, 2),
                         ),
@@ -479,12 +477,15 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                           "DAY",
                           style: AppTextStyle.bold.copyWith(
                             fontSize: 10,
-                            color: isSelected ? Colors.white.withValues(alpha: 0.8) : const Color(0xFF94A3B8),
+                            color: isSelected ? AppThemeColors.white.withValues(alpha: 0.8) : AppThemeColors.greyText,
                             letterSpacing: 0.5,
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text("${index + 1}", style: AppTextStyle.bold.copyWith(fontSize: 18, color: isSelected ? Colors.white : const Color(0xFF1E293B))),
+                        Text(
+                          "${index + 1}",
+                          style: AppTextStyle.bold.copyWith(fontSize: 18, color: isSelected ? AppThemeColors.white : AppThemeColors.blackText),
+                        ),
                       ],
                     ),
                   ),
@@ -505,11 +506,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 Container(
                   width: Get.width,
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
-                  ),
+                  decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(24), boxShadow: AppThemeStyles.shadowLight),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -517,15 +514,18 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: Text(dayData.title ?? "Day ${dayData.day}", style: AppTextStyle.bold.copyWith(fontSize: 24, color: const Color(0xFF1E293B))),
+                            child: Text(
+                              dayData.title ?? "Day ${dayData.day}",
+                              style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.blackText),
+                            ),
                           ),
                           if (dayData.date != null)
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(color: const Color(0xFF3B82F6).withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
+                              decoration: BoxDecoration(color: AppThemeColors.info.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(10)),
                               child: Text(
                                 "${dayData.date!.day}/${dayData.date!.month}/${dayData.date!.year}",
-                                style: AppTextStyle.semiBold.copyWith(fontSize: 12, color: const Color(0xFF1D4ED8)),
+                                style: AppTextStyle.semiBold.copyWith(fontSize: 12, color: AppThemeColors.info),
                               ),
                             ),
                         ],
@@ -533,7 +533,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
 
                       const SizedBox(height: 12),
 
-                      Text(dayData.description ?? "", style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.6)),
+                      Text(dayData.description ?? "", style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.6)),
                     ],
                   ),
                 ),
@@ -552,11 +552,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
     final image = exp.images?.isNotEmpty == true ? exp.images![0] : "";
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 20, offset: const Offset(0, 8))],
-      ),
+      decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(24), boxShadow: AppThemeStyles.shadowMedium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -576,14 +572,14 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                          colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+                        boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
                       ),
                       child: Text(
                         exp.category?.toUpperCase() ?? "ACTIVITY",
-                        style: AppTextStyle.bold.copyWith(fontSize: 10, color: Colors.white, letterSpacing: 0.5),
+                        style: AppTextStyle.bold.copyWith(fontSize: 10, color: AppThemeColors.white, letterSpacing: 0.5),
                       ),
                     ),
                   ),
@@ -600,7 +596,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(exp.name ?? "Experience", style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B), height: 1.2)),
+                      child: Text(exp.name ?? "Experience", style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.blackText, height: 1.2)),
                     ),
 
                     const SizedBox(width: 8),
@@ -611,19 +607,19 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [const Color(0xFF3B82F6).withValues(alpha: 0.1), const Color(0xFF1D4ED8).withValues(alpha: 0.05)],
+                          colors: [AppThemeColors.info.withValues(alpha: 0.1), AppThemeColors.info.withValues(alpha: 0.05)],
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.2)),
+                        border: Border.all(color: AppThemeColors.info.withValues(alpha: 0.2)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.access_time_rounded, size: 16, color: const Color(0xFF3B82F6)),
+                          Icon(Icons.access_time_rounded, size: 16, color: AppThemeColors.info),
                           const SizedBox(width: 6),
                           Text(
                             "${exp.startTime}${exp.endTime != null && exp.endTime!.isNotEmpty ? ' — ${exp.endTime}' : ''}",
-                            style: AppTextStyle.bold.copyWith(color: const Color(0xFF1D4ED8), fontSize: 12),
+                            style: AppTextStyle.bold.copyWith(color: AppThemeColors.info, fontSize: 12),
                           ),
                         ],
                       ),
@@ -631,7 +627,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text(exp.description!.trim(), style: AppTextStyle.bold.copyWith(color: const Color(0xFF64748B), fontSize: 14)),
+                Text(exp.description!.trim(), style: AppTextStyle.bold.copyWith(color: AppThemeColors.greyText, fontSize: 14)),
               ],
             ),
           ),
@@ -654,11 +650,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
         final customer = booking.customer;
         return Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
-          ),
+          decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(12), boxShadow: AppThemeStyles.shadowLight),
           child: Row(
             children: [
               CircleAvatar(radius: 24, child: Text(customer?.name?.isNotEmpty == true ? customer!.name![0] : "?")),
@@ -667,13 +659,13 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(customer?.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: const Color(0xFF1E293B))),
+                    Text(customer?.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                     const SizedBox(height: 4),
-                    Text(customer?.phone ?? "", style: AppTextStyle.medium.copyWith(fontSize: 14, color: const Color(0xFF64748B))),
+                    Text(customer?.phone ?? "", style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText)),
                   ],
                 ),
               ),
-              Text(booking.bookingStatus ?? "", style: AppTextStyle.medium.copyWith(color: Colors.grey)),
+              Text(booking.bookingStatus ?? "", style: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText)),
             ],
           ),
         );

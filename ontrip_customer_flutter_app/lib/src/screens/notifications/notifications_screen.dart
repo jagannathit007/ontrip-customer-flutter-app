@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import 'package:ontrip_customer_flutter_app/src/models/notification_model.dart';
 
 import '../../../app_export.dart';
@@ -10,21 +11,21 @@ class NotificationsScreen extends StatelessWidget {
     final ctrl = Get.put(NotificationCtrl());
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppThemeColors.bgCream,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Constant.instance.primary,
+        backgroundColor: AppThemeColors.primaryOrange,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios_rounded, color: AppThemeColors.white),
           onPressed: () => Get.back(),
         ),
-        title: Text('Notifications', style: AppTextStyle.bold.copyWith(fontSize: 20, color: Colors.white)),
+        title: Text('Notifications', style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.white)),
         actions: [
           Obx(() {
             if (ctrl.notifications.isEmpty) return const SizedBox.shrink();
             return TextButton(
               onPressed: ctrl.markAllAsRead,
-              child: Text('Mark all read', style: AppTextStyle.medium.copyWith(fontSize: 14, color: Colors.white)),
+              child: Text('Mark all read', style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.white)),
             );
           }),
         ],
@@ -43,8 +44,8 @@ class NotificationsScreen extends StatelessWidget {
             await ctrl.fetchNotifications();
             await ctrl.fetchUnreadCount();
           },
-          color: Constant.instance.primary,
-          backgroundColor: Colors.white,
+          color: AppThemeColors.primaryOrange,
+          backgroundColor: AppThemeColors.white,
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             itemCount: ctrl.notifications.length,
@@ -64,11 +65,10 @@ class NotificationsScreen extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: isUnread ? Constant.instance.primary.withValues(alpha: 0.05) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isUnread ? Constant.instance.primary.withValues(alpha: 0.2) : Colors.grey.withValues(alpha: 0.1)),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
+      decoration: AppThemeStyles.cardDecoration(
+        color: isUnread ? AppThemeColors.primaryOrange.withValues(alpha: 0.05) : AppThemeColors.white,
+        radius: AppThemeStyles.radiusMedium,
+        shadows: AppThemeStyles.shadowLight,
       ),
       child: Material(
         color: Colors.transparent,
@@ -101,7 +101,7 @@ class NotificationsScreen extends StatelessWidget {
                             Container(
                               width: 8,
                               height: 8,
-                              decoration: BoxDecoration(color: Constant.instance.primary, shape: BoxShape.circle),
+                              decoration: BoxDecoration(color: AppThemeColors.primaryOrange, shape: BoxShape.circle),
                             ),
                         ],
                       ),
@@ -115,9 +115,9 @@ class NotificationsScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(Icons.access_time_rounded, size: 12, color: Colors.grey.shade400),
+                          Icon(Icons.access_time_rounded, size: 12, color: AppThemeColors.greyText.withValues(alpha: 0.6)),
                           const SizedBox(width: 4),
-                          Text(timeAgo, style: AppTextStyle.medium.copyWith(fontSize: 11, color: Colors.grey.shade400)),
+                          Text(timeAgo, style: AppTextStyle.medium.copyWith(fontSize: 11, color: AppThemeColors.greyText.withValues(alpha: 0.6))),
                         ],
                       ),
                     ],
@@ -140,16 +140,16 @@ class NotificationsScreen extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-              child: Icon(Icons.notifications_none_rounded, size: 64, color: Constant.instance.primary),
+              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(Icons.notifications_none_rounded, size: 64, color: AppThemeColors.primaryOrange),
             ),
             const SizedBox(height: 24),
-            Text('No Notifications', style: AppTextStyle.bold.copyWith(fontSize: 22, color: const Color(0xFF1E293B))),
+            Text('No Notifications', style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.blackText)),
             const SizedBox(height: 12),
             Text(
               'You\'re all caught up! Check back later for updates.',
               textAlign: TextAlign.center,
-              style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.5),
+              style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.5),
             ),
           ],
         ),
@@ -187,7 +187,7 @@ class NotificationsScreen extends StatelessWidget {
       case 'alert':
         return const Color(0xFFEF4444);
       default:
-        return Constant.instance.primary;
+        return AppThemeColors.primaryOrange;
     }
   }
 

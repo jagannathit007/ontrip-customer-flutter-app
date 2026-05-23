@@ -1,3 +1,5 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
+
 import '../../app_export.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
@@ -13,36 +15,21 @@ class CustomBottomNavBar extends StatefulWidget {
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProviderStateMixin {
   late List<AnimationController> _animationControllers;
 
-  final List<NavItem> _navItems = [
-    NavItem(
-      iconAsset: Graphics.instance.iconHome,
-      activeIconAsset: Graphics.instance.iconHomeFill,
-      label: 'Trip',
-      activeColor: Constant.instance.primary,
-      iconType: NavIconType.icon,
-    ),
-    NavItem(
-      iconAsset: Graphics.instance.iconHistory,
-      activeIconAsset: Graphics.instance.iconHistory,
-      label: 'History',
-      activeColor: Constant.instance.primary,
-      iconType: NavIconType.icon,
-    ),
-    NavItem(
-      iconAsset: Graphics.instance.iconCommunity,
-      activeIconAsset: Graphics.instance.iconCommunity,
-      label: 'Community',
-      activeColor: Constant.instance.primary,
-      iconType: NavIconType.icon,
-    ),
-    NavItem(
-      iconAsset: Graphics.instance.iconProfile,
-      activeIconAsset: Graphics.instance.iconProfile,
-      label: 'Profile',
-      activeColor: Constant.instance.primary,
-      iconType: NavIconType.icon,
-    ),
-  ];
+  // Determine user role
+  final bool isVendor = getStorage(AppSession.userRole) == 'vendor';
+  late final List<NavItem> _navItems = isVendor
+      ? [
+          NavItem(iconAsset: Graphics.instance.iconHistory, activeIconAsset: Graphics.instance.iconHistory, label: 'Trip', iconType: NavIconType.icon),
+          NavItem(iconAsset: Graphics.instance.iconCommunity, activeIconAsset: Graphics.instance.iconCommunity, label: 'Community', iconType: NavIconType.icon),
+          NavItem(iconAsset: Graphics.instance.iconProfile, activeIconAsset: Graphics.instance.iconProfile, label: 'Profile', iconType: NavIconType.icon),
+        ]
+      : [
+          NavItem(iconAsset: Graphics.instance.iconHome, activeIconAsset: Graphics.instance.iconHistory, label: 'Trip', iconType: NavIconType.icon),
+          NavItem(iconAsset: Graphics.instance.iconHistory, activeIconAsset: Graphics.instance.iconHistory, label: 'History', iconType: NavIconType.icon),
+
+          NavItem(iconAsset: Graphics.instance.iconCommunity, activeIconAsset: Graphics.instance.iconCommunity, label: 'Community', iconType: NavIconType.icon),
+          NavItem(iconAsset: Graphics.instance.iconProfile, activeIconAsset: Graphics.instance.iconProfile, label: 'Profile', iconType: NavIconType.icon),
+        ];
 
   @override
   void initState() {
@@ -246,47 +233,50 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProv
     final isActive = widget.currentIndex == index;
     final item = _navItems[index];
 
-    return GestureDetector(
-      onTap: () => widget.onTabChange(index),
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          // Active item gets the green pill background
-          color: isActive ? item.activeColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              isActive ? item.activeIconAsset! : item.iconAsset!,
-              width: 20,
-              height: 20,
-              // Icon is black on green background, white on black background
-              colorFilter: ColorFilter.mode(isActive ? Colors.white : Colors.black, BlendMode.srcIn),
-            ),
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => widget.onTabChange(index),
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            // Active item gets the green pill background
+            color: isActive ? AppThemeColors.primaryOrange : Colors.transparent,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                isActive ? item.activeIconAsset! : item.iconAsset!,
+                width: 20,
+                height: 20,
+                // Icon is black on green background, white on black background
+                colorFilter: ColorFilter.mode(isActive ? Colors.white : Colors.black, BlendMode.srcIn),
+              ),
 
-            if (isActive)
-              Flexible(
-                child: AnimatedSize(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      item.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              if (isActive)
+                Expanded(
+                  child: AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        item.label,
+                        maxLines: 1,
+                        // overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
                     ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -301,7 +291,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProv
         isActive ? item.activeIconAsset! : item.iconAsset!,
         width: iconSize,
         height: iconSize,
-        colorFilter: ColorFilter.mode(isActive ? item.activeColor : Colors.grey.shade400, BlendMode.srcIn),
+        colorFilter: ColorFilter.mode(isActive ? AppThemeColors.primaryOrange : Colors.grey.shade400, BlendMode.srcIn),
       ),
     );
   }
@@ -313,10 +303,9 @@ class NavItem {
   final String? iconAsset;
   final String? activeIconAsset;
   final String label;
-  final Color activeColor;
   final NavIconType iconType;
 
-  NavItem({this.iconAsset, this.activeIconAsset, required this.label, required this.activeColor, required this.iconType});
+  NavItem({this.iconAsset, this.activeIconAsset, required this.label, required this.iconType});
 }
 
 // import '../../app_export.dart';

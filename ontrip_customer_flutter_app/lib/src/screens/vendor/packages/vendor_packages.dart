@@ -1,3 +1,5 @@
+// Updated VendorPackagesScreen with corrected Notification Builder
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../../../app_export.dart';
 import '../home/vendor_home_ctrl.dart';
 
@@ -25,6 +27,13 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
     _searchCtrl.addListener(() => _query.value = _searchCtrl.text.toLowerCase());
   }
 
+  String get _greeting {
+    final h = DateTime.now().hour;
+    if (h < 12) return 'Good Morning ☀️';
+    if (h < 17) return 'Good Afternoon 🌤️';
+    return 'Good Evening 🌙';
+  }
+
   @override
   void dispose() {
     _fadeController.dispose();
@@ -35,9 +44,9 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
   @override
   Widget build(BuildContext context) {
     final ctrl = Get.find<VendorHomeCtrl>();
-
+    final authCtrl = Get.find<AuthenticationController>();
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppThemeColors.bgCream,
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Column(
@@ -48,34 +57,114 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                  colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                 ),
                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-                boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
               ),
               child: SafeArea(
                 bottom: false,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
-                        child: const Icon(Icons.inventory_2_rounded, color: Colors.white, size: 28),
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('My Packages', style: AppTextStyle.bold.copyWith(fontSize: 22, color: Colors.white, letterSpacing: -0.5)),
-                          Obx(
-                            () => Text(
-                              '${ctrl.packages.length} packages',
-                              style: AppTextStyle.medium.copyWith(fontSize: 13, color: Colors.white.withValues(alpha: 0.85)),
+                        decoration: BoxDecoration(
+                          color: AppThemeColors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 8))],
+                        ),
+                        padding: const EdgeInsets.all(3),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)]),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              (authCtrl.userAuthData['name']?.toString().isNotEmpty ?? false) ? authCtrl.userAuthData['name'][0].toUpperCase() : 'V',
+                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 24),
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_greeting, style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.white.withValues(alpha: 0.8))),
+                            const SizedBox(height: 4),
+                            Obx(
+                              () => Text(
+                                authCtrl.userAuthData['name'] ?? 'Vendor',
+                                style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.white, letterSpacing: -0.5),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                              child: Obx(
+                                () => Text(
+                                  (authCtrl.userAuthData['type'] ?? 'vendor').toString().toUpperCase(),
+                                  style: AppTextStyle.bold.copyWith(fontSize: 10, color: AppThemeColors.white, letterSpacing: 1),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Notification Icon with Badge
+                      Builder(
+                        builder: (context) {
+                          if (!Get.isRegistered<NotificationCtrl>()) {
+                            Get.put(NotificationCtrl());
+                          }
+                          final notificationCtrl = Get.find<NotificationCtrl>();
+
+                          return GestureDetector(
+                            onTap: () => Get.toNamed(RouteNames.notifications),
+                            child: Container(
+                              // margin: const EdgeInsets.only(right: 16),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  const Icon(Icons.notifications_outlined, color: AppThemeColors.white, size: 28),
+                                  Obx(() {
+                                    if (notificationCtrl.unreadCount.value > 0) {
+                                      return Positioned(
+                                        right: -5,
+                                        top: -6,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            color: AppThemeColors.error,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(color: AppThemeColors.primaryOrange, width: 2),
+                                          ),
+                                          constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                                          child: Center(
+                                            child: Text(
+                                              notificationCtrl.unreadCount.value > 9 ? '9+' : '${notificationCtrl.unreadCount.value}',
+                                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 12),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -90,18 +179,18 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppThemeColors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                  border: Border.all(color: AppThemeColors.borderLight),
                   boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
                 ),
                 child: TextField(
                   controller: _searchCtrl,
-                  style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B)),
+                  style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText),
                   decoration: InputDecoration(
                     hintText: 'Search by title or destination...',
-                    hintStyle: AppTextStyle.medium.copyWith(color: const Color(0xFF94A3B8), fontSize: 15),
-                    prefixIcon: Icon(Icons.search_rounded, color: Constant.instance.primary.withValues(alpha: 0.7), size: 20),
+                    hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText, fontSize: 15),
+                    prefixIcon: Icon(Icons.search_rounded, color: AppThemeColors.primaryOrange.withValues(alpha: 0.7), size: 20),
                     border: InputBorder.none,
                     contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   ),
@@ -130,8 +219,8 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
 
                 return RefreshIndicator(
                   onRefresh: ctrl.fetchPackages,
-                  color: Constant.instance.primary,
-                  backgroundColor: Colors.white,
+                  color: AppThemeColors.primaryOrange,
+                  backgroundColor: AppThemeColors.white,
                   child: ListView.builder(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
                     itemCount: filtered.length,
@@ -152,16 +241,16 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 20, offset: const Offset(0, 8))],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge),
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppThemeStyles.radiusXLarge)),
             child: Stack(
               children: [
                 CustomNetworkImage(imageUrl: imageUrl, height: 180, width: double.infinity),
@@ -171,7 +260,7 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(color: _statusColor(pkg.status), borderRadius: BorderRadius.circular(8)),
-                    child: Text(pkg.status.toUpperCase(), style: AppTextStyle.bold.copyWith(fontSize: 10, color: Colors.white, letterSpacing: 0.5)),
+                    child: Text(pkg.status.toUpperCase(), style: AppTextStyle.bold.copyWith(fontSize: 10, color: AppThemeColors.white, letterSpacing: 0.5)),
                   ),
                 ),
                 Positioned(
@@ -180,7 +269,7 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.55), borderRadius: BorderRadius.circular(8)),
-                    child: Text('${pkg.totalDays}D', style: AppTextStyle.bold.copyWith(fontSize: 11, color: Colors.white)),
+                    child: Text('${pkg.totalDays}D', style: AppTextStyle.bold.copyWith(fontSize: 11, color: AppThemeColors.white)),
                   ),
                 ),
               ],
@@ -194,14 +283,14 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 8),
-                Text(pkg.title, style: AppTextStyle.bold.copyWith(fontSize: 18, color: const Color(0xFF1E293B))),
+                Text(pkg.title, style: AppTextStyle.bold.copyWith(fontSize: 18, color: AppThemeColors.blackText)),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(child: _buildInfoItem(Icons.location_on_rounded, pkg.destination, Constant.instance.orange)),
+                    Expanded(child: _buildInfoItem(Icons.location_on_rounded, pkg.destination, AppThemeColors.warning)),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: _buildInfoItem(Icons.currency_rupee_rounded, '${pkg.currency} ${pkg.basePrice.toStringAsFixed(0)}', Constant.instance.primary),
+                      child: _buildInfoItem(Icons.currency_rupee_rounded, '${pkg.currency} ${pkg.basePrice.toStringAsFixed(0)}', AppThemeColors.primaryOrange),
                     ),
                   ],
                 ),
@@ -221,17 +310,17 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                  colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                 ),
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("View Trip Details", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.white)),
+                  Text("View Trip Details", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.white)),
                   const SizedBox(width: 8),
-                  const Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white),
+                  const Icon(Icons.arrow_forward_rounded, size: 18, color: AppThemeColors.white),
                 ],
               ),
             ),
@@ -257,7 +346,7 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
           Flexible(
             child: Text(
               label,
-              style: AppTextStyle.medium.copyWith(fontSize: 12, color: const Color(0xFF64748B)),
+              style: AppTextStyle.medium.copyWith(fontSize: 12, color: AppThemeColors.greyText),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -275,16 +364,16 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-              child: Icon(Icons.inventory_2_outlined, size: 56, color: Constant.instance.primary),
+              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(Icons.inventory_2_outlined, size: 56, color: AppThemeColors.primaryOrange),
             ),
             const SizedBox(height: 24),
-            Text('No Packages Found', style: AppTextStyle.bold.copyWith(fontSize: 22, color: const Color(0xFF1E293B))),
+            Text('No Packages Found', style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.blackText)),
             const SizedBox(height: 10),
             Text(
               'No packages match your search.',
               textAlign: TextAlign.center,
-              style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.5),
+              style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.5),
             ),
           ],
         ),
@@ -295,13 +384,13 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
   Color _statusColor(String status) {
     switch (status.toLowerCase()) {
       case 'approved':
-        return const Color(0xFF10B981);
+        return AppThemeColors.success;
       case 'pending':
-        return const Color(0xFFF59E0B);
+        return AppThemeColors.warning;
       case 'rejected':
-        return const Color(0xFFEF4444);
+        return AppThemeColors.error;
       default:
-        return Colors.grey;
+        return AppThemeColors.greyText;
     }
   }
 }

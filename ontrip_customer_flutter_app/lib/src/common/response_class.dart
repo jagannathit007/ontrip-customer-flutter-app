@@ -7,7 +7,7 @@ class ResponseClass<T> {
   T? data;
 
   ResponseClass({
-    this.msg = 'Somethinggggg went wrong',
+    this.msg = 'Something went wrong',
     this.isSuccess = false,
     this.isLoading = false,
     this.isRefresh = true,

@@ -1,5 +1,4 @@
 import '../../../app_export.dart';
-import '../vendor/home/vendor_home.dart';
 import '../vendor/packages/vendor_packages.dart';
 
 class DashboardCtrl extends GetxController {
@@ -26,17 +25,28 @@ class DashboardCtrl extends GetxController {
   Widget currentScreen() {
     if (isVendor) {
       switch (currentIndex.value) {
+        
         case 0:
-          return const VendorHomeScreen(); // vendor packages API
-        case 1:
           return const VendorPackagesScreen(); // vendor packages list
-        case 2:
+        case 1:
           return const CommunityScreen(); // shared
-        case 3:
+        case 2:
           return const SettingsScreen(); // shared (uses vendorProfile)
         default:
-          return const VendorHomeScreen();
+          return const VendorPackagesScreen();
       }
+      // switch (currentIndex.value) {
+      //   case 0:
+      //     return const VendorHomeScreen(); // vendor packages API
+      //   case 1:
+      //     return const VendorPackagesScreen(); // vendor packages list
+      //   case 2:
+      //     return const CommunityScreen(); // shared
+      //   case 3:
+      //     return const SettingsScreen(); // shared (uses vendorProfile)
+      //   default:
+      //     return const VendorHomeScreen();
+      // }
     } else {
       switch (currentIndex.value) {
         case 0:

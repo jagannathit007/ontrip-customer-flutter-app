@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../../app_export.dart';
 
 class DashboardScreen extends GetView<DashboardCtrl> {
@@ -6,71 +7,45 @@ class DashboardScreen extends GetView<DashboardCtrl> {
   Future<bool> _onWillPop() async {
     return await Get.dialog<bool>(
           AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(28),
-            ),
-            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppThemeStyles.radiusXXLarge)),
+            backgroundColor: AppThemeColors.white,
             elevation: 32,
-            shadowColor: Colors.black.withValues(alpha: 0.15),
+            shadowColor: AppThemeColors.shadowDark,
             title: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.red.shade50, Colors.red.shade100],
+                      colors: [AppThemeColors.error.withValues(alpha: 0.2), AppThemeColors.error.withValues(alpha: 0.3)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Icon(
-                    Icons.exit_to_app_rounded,
-                    color: Colors.red.shade500,
-                    size: 26,
-                  ),
+                  child: Icon(Icons.exit_to_app_rounded, color: AppThemeColors.error, size: 26),
                 ),
                 const SizedBox(width: 18),
                 const Text(
                   'Exit App',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1A1A),
-                    letterSpacing: -0.5,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: Color(0xFF1B213F), letterSpacing: -0.5),
                 ),
               ],
             ),
-            content: const Text(
+            content: Text(
               'Are you sure you want to exit the application?',
-              style: TextStyle(
-                fontSize: 16,
-                color: Color(0xFF666666),
-                height: 1.6,
-                letterSpacing: 0.2,
-              ),
+              style: TextStyle(fontSize: 16, color: AppThemeColors.greyText, height: 1.6, letterSpacing: 0.2),
             ),
             actions: [
               TextButton(
                 onPressed: () => Get.back(result: false),
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 10,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
                 child: const Text(
                   'Cancel',
-                  style: TextStyle(
-                    color: Color(0xFF666666),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    letterSpacing: 0.3,
-                  ),
+                  style: TextStyle(color: Color(0xFF8E95A2), fontWeight: FontWeight.w600, fontSize: 16, letterSpacing: 0.3),
                 ),
               ),
               ElevatedButton(
@@ -79,26 +54,14 @@ class DashboardScreen extends GetView<DashboardCtrl> {
                   SystemNavigator.pop();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade500,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 25,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  backgroundColor: AppThemeColors.error,
+                  foregroundColor: AppThemeColors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 25),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 0,
                   shadowColor: Colors.transparent,
                 ),
-                child: const Text(
-                  'Exit',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                    letterSpacing: 0.3,
-                  ),
-                ),
+                child: const Text('Exit', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, letterSpacing: 0.3)),
               ),
             ],
           ),
@@ -122,21 +85,14 @@ class DashboardScreen extends GetView<DashboardCtrl> {
           },
           child: Scaffold(
             extendBody: true,
-            backgroundColor: const Color(0xFFF8FAFC),
+            backgroundColor: AppThemeColors.bgCream,
             bottomNavigationBar: Obx(() {
               if (ctrl.cardScanner.value == false) {
                 return const SizedBox.shrink();
               }
-              return CustomBottomNavBar(
-                currentIndex: ctrl.currentIndex.value,
-                onTabChange: ctrl.onTapForBottomNavBar,
-              );
+              return CustomBottomNavBar(currentIndex: ctrl.currentIndex.value, onTabChange: ctrl.onTapForBottomNavBar);
             }),
-            body: SafeArea(
-              bottom: true,
-              top: false,
-              child: ctrl.currentScreen(),
-            ),
+            body: SafeArea(bottom: true, top: false, child: ctrl.currentScreen()),
           ),
         );
       },

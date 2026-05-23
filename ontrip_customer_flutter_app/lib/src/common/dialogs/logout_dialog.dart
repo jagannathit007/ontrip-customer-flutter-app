@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import 'package:ontrip_customer_flutter_app/src/screens/auth/sign_in/sign_in_ctrl.dart';
 
 import '../../../app_export.dart';
@@ -63,19 +64,13 @@ class _LogoutDialogState extends State<LogoutDialog>
                 child: Dialog(
                   backgroundColor: Colors.transparent,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(28),
+                    borderRadius: BorderRadius.circular(AppThemeStyles.radiusXXLarge),
                     child: Container(
                       constraints: const BoxConstraints(maxWidth: 340),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.12),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
+                        color: AppThemeColors.white,
+                        borderRadius: BorderRadius.circular(AppThemeStyles.radiusXXLarge),
+                        boxShadow: AppThemeStyles.shadowLarge,
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -92,21 +87,15 @@ class _LogoutDialogState extends State<LogoutDialog>
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
-                                        const Color(
-                                          0xFF2196F3,
-                                        ).withValues(alpha: 0.1),
-                                        const Color(
-                                          0xFF1976D2,
-                                        ).withValues(alpha: 0.15),
+                                        AppThemeColors.primaryOrange.withValues(alpha: 0.1),
+                                        AppThemeColors.primaryOrange.withValues(alpha: 0.15),
                                       ],
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                     ),
                                     borderRadius: BorderRadius.circular(24),
                                     border: Border.all(
-                                      color: const Color(
-                                        0xFF2196F3,
-                                      ).withValues(alpha: 0.2),
+                                      color: AppThemeColors.primaryOrange.withValues(alpha: 0.2),
                                       width: 2,
                                     ),
                                   ),
@@ -115,15 +104,13 @@ class _LogoutDialogState extends State<LogoutDialog>
                                       width: 50,
                                       height: 50,
                                       decoration: BoxDecoration(
-                                        color: const Color(
-                                          0xFF2196F3,
-                                        ).withValues(alpha: 0.1),
+                                        color: AppThemeColors.primaryOrange.withValues(alpha: 0.1),
                                         borderRadius: BorderRadius.circular(16),
                                       ),
                                       child: Icon(
                                         Icons.logout_rounded,
                                         size: 28,
-                                        color: const Color(0xFF2196F3),
+                                        color: AppThemeColors.primaryOrange,
                                       ),
                                     ),
                                   ),
@@ -137,10 +124,9 @@ class _LogoutDialogState extends State<LogoutDialog>
                             child: Text(
                               'Log Out?',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: AppTextStyle.bold.copyWith(
                                 fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.grey.shade800,
+                                color: AppThemeColors.blackText,
                                 height: 1.3,
                               ),
                             ),
@@ -151,10 +137,9 @@ class _LogoutDialogState extends State<LogoutDialog>
                             child: Text(
                               'Are you sure you want to log out of your account?',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: AppTextStyle.medium.copyWith(
                                 fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.grey.shade600,
+                                color: AppThemeColors.greyText,
                                 height: 1.4,
                               ),
                             ),
@@ -168,10 +153,10 @@ class _LogoutDialogState extends State<LogoutDialog>
                                   child: Container(
                                     height: 52,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
+                                      color: AppThemeColors.bgCream,
                                       borderRadius: BorderRadius.circular(16),
                                       border: Border.all(
-                                        color: Colors.grey.shade300,
+                                        color: AppThemeColors.borderLight,
                                         width: 1,
                                       ),
                                     ),
@@ -188,13 +173,11 @@ class _LogoutDialogState extends State<LogoutDialog>
                                         child: Center(
                                           child: Text(
                                             "Cancel",
-                                            style: TextStyle(
+                                            style: AppTextStyle.semiBold.copyWith(
                                               fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color:
-                                                  controller.isLoadingForLogout
-                                                  ? Colors.grey.shade400
-                                                  : Colors.grey.shade700,
+                                              color: controller.isLoadingForLogout
+                                                  ? AppThemeColors.greyText.withValues(alpha: 0.5)
+                                                  : AppThemeColors.greyText,
                                             ),
                                           ),
                                         ),
@@ -211,12 +194,12 @@ class _LogoutDialogState extends State<LogoutDialog>
                                       gradient: LinearGradient(
                                         colors: controller.isLoadingForLogout
                                             ? [
-                                                Colors.grey.shade400,
-                                                Colors.grey.shade500,
+                                                AppThemeColors.greyText.withValues(alpha: 0.5),
+                                                AppThemeColors.greyText.withValues(alpha: 0.6),
                                               ]
                                             : [
-                                                const Color(0xFF2196F3),
-                                                const Color(0xFF1976D2),
+                                                AppThemeColors.primaryOrange,
+                                                AppThemeColors.primaryOrange.withValues(alpha: 0.8),
                                               ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -226,9 +209,7 @@ class _LogoutDialogState extends State<LogoutDialog>
                                           ? null
                                           : [
                                               BoxShadow(
-                                                color: const Color(
-                                                  0xFF2196F3,
-                                                ).withValues(alpha: 0.3),
+                                                color: AppThemeColors.primaryOrange.withValues(alpha: 0.3),
                                                 blurRadius: 8,
                                                 offset: const Offset(0, 4),
                                               ),
@@ -279,17 +260,15 @@ class _LogoutDialogState extends State<LogoutDialog>
                                                         valueColor:
                                                             AlwaysStoppedAnimation<
                                                               Color
-                                                            >(Colors.white),
+                                                            >(AppThemeColors.white),
                                                       ),
                                                     ),
                                                     const SizedBox(width: 12),
                                                     Text(
                                                       "Logging Out...",
-                                                      style: TextStyle(
+                                                      style: AppTextStyle.semiBold.copyWith(
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
+                                                        color: AppThemeColors.white,
                                                       ),
                                                     ),
                                                   ],
@@ -301,16 +280,14 @@ class _LogoutDialogState extends State<LogoutDialog>
                                                     Icon(
                                                       Icons.logout_rounded,
                                                       size: 20,
-                                                      color: Colors.white,
+                                                      color: AppThemeColors.white,
                                                     ),
                                                     const SizedBox(width: 8),
                                                     Text(
                                                       "Log Out",
-                                                      style: TextStyle(
+                                                      style: AppTextStyle.semiBold.copyWith(
                                                         fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
+                                                        color: AppThemeColors.white,
                                                       ),
                                                     ),
                                                   ],

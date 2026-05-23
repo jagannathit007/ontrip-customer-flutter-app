@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import '../../../../../app_export.dart';
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../common/media_display_screen.dart';
 
 class CommunityChatScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class CommunityChatScreen extends StatelessWidget {
       init: CommunityChatCtrl(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: AppThemeColors.bgCream,
           appBar: _buildAppBar(controller),
           body: Column(
             children: [
@@ -50,10 +51,10 @@ class CommunityChatScreen extends StatelessWidget {
   PreferredSizeWidget _buildAppBar(CommunityChatCtrl controller) {
     return AppBar(
       titleSpacing: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: AppThemeColors.white,
       elevation: 0,
-      surfaceTintColor: Colors.white,
-      shadowColor: Colors.black.withValues(alpha: 0.1),
+      surfaceTintColor: AppThemeColors.white,
+      shadowColor: AppThemeColors.shadowMedium,
       scrolledUnderElevation: 8,
       leadingWidth: 100,
       leading: Row(
@@ -62,21 +63,17 @@ class CommunityChatScreen extends StatelessWidget {
             onPressed: () => Get.back(),
             icon: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: const Color(0xFFF1F5F9), borderRadius: BorderRadius.circular(12)),
-              child: const Icon(Icons.arrow_back_ios_new, size: 16, color: Color(0xFF1E293B)),
+              decoration: BoxDecoration(color: AppThemeColors.bgCream, borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.arrow_back_ios_new, size: 16, color: AppThemeColors.blackText),
             ),
           ),
           Container(
             height: 44,
             width: 44,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
-              ),
+              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
               borderRadius: BorderRadius.circular(14),
-              boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+              boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
             ),
             child: Obx(() {
               final img = controller.coverImage.value;
@@ -102,17 +99,17 @@ class CommunityChatScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyle.bold.copyWith(fontSize: 17, color: const Color(0xFF1E293B), height: 1.2)),
+                  Text(title, style: AppTextStyle.bold.copyWith(fontSize: 17, color: AppThemeColors.blackText, height: 1.2)),
                   const SizedBox(height: 2),
                   Row(
                     children: [
                       Container(
                         width: 8,
                         height: 8,
-                        decoration: BoxDecoration(color: Constant.instance.green2, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(color: AppThemeColors.success, shape: BoxShape.circle),
                       ),
                       const SizedBox(width: 6),
-                      Text("$participants participants", style: AppTextStyle.medium.copyWith(fontSize: 13, color: const Color(0xFF64748B))),
+                      Text("$participants participants", style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.greyText)),
                     ],
                   ),
                 ],
@@ -135,13 +132,13 @@ class CommunityChatScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.only(right: 4),
               decoration: BoxDecoration(
-                color: controller.notificationEnabled.value ? Constant.instance.primary.withValues(alpha: 0.15) : const Color(0xFFF1F5F9),
+                color: controller.notificationEnabled.value ? AppThemeColors.primaryOrange.withValues(alpha: 0.15) : AppThemeColors.bgCream,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: controller.notificationEnabled.value ? Constant.instance.primary.withValues(alpha: 0.2) : const Color(0xFFE2E8F0)),
+                border: Border.all(color: controller.notificationEnabled.value ? AppThemeColors.borderOrange : AppThemeColors.borderLight),
               ),
               child: Icon(
                 controller.notificationEnabled.value ? Icons.notifications_active_rounded : Icons.notifications_off_rounded,
-                color: controller.notificationEnabled.value ? Constant.instance.primary : const Color(0xFF64748B),
+                color: controller.notificationEnabled.value ? AppThemeColors.primaryOrange : AppThemeColors.greyText,
                 size: 18,
               ),
             ),
@@ -160,11 +157,11 @@ class CommunityChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: Constant.instance.orange.withValues(alpha: 0.15),
+              color: AppThemeColors.warning.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Constant.instance.orange.withValues(alpha: 0.2)),
+              border: Border.all(color: AppThemeColors.warning.withValues(alpha: 0.2)),
             ),
-            child: Icon(Icons.group_rounded, color: Constant.instance.orange, size: 18),
+            child: const Icon(Icons.group_rounded, color: AppThemeColors.warning, size: 18),
           ),
         ),
         GestureDetector(
@@ -180,11 +177,11 @@ class CommunityChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             margin: const EdgeInsets.only(right: 16),
             decoration: BoxDecoration(
-              color: Constant.instance.apple.withValues(alpha: 0.15),
+              color: AppThemeColors.success.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Constant.instance.apple.withValues(alpha: 0.2)),
+              border: Border.all(color: AppThemeColors.success.withValues(alpha: 0.2)),
             ),
-            child: Icon(Icons.image_rounded, color: Constant.instance.apple, size: 18),
+            child: const Icon(Icons.image_rounded, color: AppThemeColors.success, size: 18),
           ),
         ),
       ],
@@ -205,7 +202,7 @@ class CommunityChatScreen extends StatelessWidget {
           if (!isMe)
             Padding(
               padding: const EdgeInsets.only(left: 52, bottom: 6),
-              child: Text(message.senderName, style: AppTextStyle.semiBold.copyWith(fontSize: 12, color: Constant.instance.primary)),
+              child: Text(message.senderName, style: AppTextStyle.semiBold.copyWith(fontSize: 12, color: AppThemeColors.primaryOrange)),
             ),
           Row(
             mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -217,13 +214,9 @@ class CommunityChatScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     gradient: isMe
-                        ? LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
-                          )
+                        ? const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)])
                         : null,
-                    color: isMe ? null : Colors.white,
+                    color: isMe ? null : AppThemeColors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(20),
                       topRight: const Radius.circular(20),
@@ -232,7 +225,7 @@ class CommunityChatScreen extends StatelessWidget {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: isMe ? Constant.instance.primary.withValues(alpha: 0.2) : Colors.black.withValues(alpha: 0.08),
+                        color: isMe ? AppThemeColors.primaryOrange.withValues(alpha: 0.2) : AppThemeColors.shadowLight,
                         blurRadius: isMe ? 12 : 8,
                         offset: Offset(0, isMe ? 4 : 2),
                       ),
@@ -246,11 +239,8 @@ class CommunityChatScreen extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            time,
-                            style: AppTextStyle.medium.copyWith(fontSize: 11, color: isMe ? Colors.white.withValues(alpha: 0.8) : const Color(0xFF94A3B8)),
-                          ),
-                          if (isMe) ...[const SizedBox(width: 6), Icon(Icons.done_all_rounded, size: 14, color: Colors.white.withValues(alpha: 0.8))],
+                          Text(time, style: AppTextStyle.medium.copyWith(fontSize: 11, color: isMe ? AppThemeColors.subWhite : AppThemeColors.greyText)),
+                          if (isMe) ...[const SizedBox(width: 6), Icon(Icons.done_all_rounded, size: 14, color: AppThemeColors.white.withValues(alpha: 0.8))],
                         ],
                       ),
                     ],
@@ -274,13 +264,11 @@ class CommunityChatScreen extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isMe
-              ? [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)]
-              : [Constant.instance.orange, Constant.instance.orange.withValues(alpha: 0.8)],
+          colors: isMe ? [AppThemeColors.primaryOrange, const Color(0xFFF28E65)] : [AppThemeColors.warning, const Color(0xFFFCD34D)],
         ),
         shape: BoxShape.circle,
         boxShadow: [
-          BoxShadow(color: (isMe ? Constant.instance.primary : Constant.instance.orange).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(color: (isMe ? AppThemeColors.primaryOrange : AppThemeColors.warning).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2)),
         ],
       ),
       child: Center(
@@ -318,7 +306,10 @@ class CommunityChatScreen extends StatelessWidget {
     }
 
     // Default: Text message
-    return Text(message.content ?? "", style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? Colors.white : const Color(0xFF1E293B), height: 1.4));
+    return Text(
+      message.content ?? "",
+      style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? AppThemeColors.white : AppThemeColors.blackText, height: 1.4),
+    );
   }
 
   bool _isVideoFile(String url) {
@@ -350,7 +341,7 @@ class CommunityChatScreen extends StatelessWidget {
         ),
         if (message.content?.isNotEmpty == true) ...[
           const SizedBox(height: 12),
-          Text(message.content!, style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? Colors.white : const Color(0xFF1E293B), height: 1.4)),
+          Text(message.content!, style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? AppThemeColors.white : AppThemeColors.blackText, height: 1.4)),
         ],
       ],
     );
@@ -420,7 +411,7 @@ class CommunityChatScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
                   ),
-                  child: Icon(Icons.play_arrow_rounded, color: Constant.instance.primary, size: 32),
+                  child: const Icon(Icons.play_arrow_rounded, color: AppThemeColors.primaryOrange, size: 32),
                 ),
               ),
             ],
@@ -428,7 +419,7 @@ class CommunityChatScreen extends StatelessWidget {
         ),
         if (message.content?.isNotEmpty == true) ...[
           const SizedBox(height: 12),
-          Text(message.content!, style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? Colors.white : const Color(0xFF1E293B), height: 1.4)),
+          Text(message.content!, style: AppTextStyle.medium.copyWith(fontSize: 15, color: isMe ? AppThemeColors.white : AppThemeColors.blackText, height: 1.4)),
         ],
       ],
     );
@@ -440,8 +431,8 @@ class CommunityChatScreen extends StatelessWidget {
       final hasMedia = controller.selectedImages.isNotEmpty || controller.selectedVideos.isNotEmpty;
       return Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 24, offset: const Offset(0, -8))],
+          color: AppThemeColors.white,
+          boxShadow: [BoxShadow(color: AppThemeColors.shadowMedium, blurRadius: 24, offset: const Offset(0, -8))],
         ),
         child: SafeArea(
           child: Column(
@@ -479,10 +470,10 @@ class CommunityChatScreen extends StatelessWidget {
                                           gradient: LinearGradient(
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
-                                            colors: [Constant.instance.primary.withValues(alpha: 0.8), Constant.instance.primary],
+                                            colors: [AppThemeColors.primaryOrange.withValues(alpha: 0.8), AppThemeColors.primaryOrange],
                                           ),
                                         ),
-                                        child: const Icon(Icons.play_circle_filled_rounded, color: Colors.white, size: 32),
+                                        child: const Icon(Icons.play_circle_filled_rounded, color: AppThemeColors.white, size: 32),
                                       )
                                     : Image.file(File(file.path), height: 80, width: 80, fit: BoxFit.cover),
                               ),
@@ -516,20 +507,20 @@ class CommunityChatScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           gradient: hasImages
-                              ? LinearGradient(
+                              ? const LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
-                                  colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                                  colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                                 )
                               : null,
-                          color: hasImages ? null : const Color(0xFFF8FAFC),
+                          color: hasImages ? null : AppThemeColors.bgCream,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: hasImages ? Colors.transparent : const Color(0xFFE2E8F0)),
+                          border: Border.all(color: hasImages ? Colors.transparent : AppThemeColors.borderLight),
                           boxShadow: hasImages
-                              ? [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))]
+                              ? [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))]
                               : null,
                         ),
-                        child: Icon(Icons.camera_alt_rounded, color: hasImages ? Colors.white : const Color(0xFF64748B), size: 22),
+                        child: Icon(Icons.camera_alt_rounded, color: hasImages ? AppThemeColors.white : AppThemeColors.greyText, size: 22),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -537,16 +528,16 @@ class CommunityChatScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF8FAFC),
+                          color: AppThemeColors.bgCream,
                           borderRadius: BorderRadius.circular(28),
-                          border: Border.all(color: const Color(0xFFE2E8F0)),
+                          border: Border.all(color: AppThemeColors.borderLight),
                         ),
                         child: TextField(
                           controller: controller.messageController,
-                          style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B)),
+                          style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText),
                           decoration: InputDecoration(
                             hintText: hasImages ? "Add a caption..." : "Type your message...",
-                            hintStyle: AppTextStyle.medium.copyWith(color: const Color(0xFF94A3B8), fontSize: 15),
+                            hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText, fontSize: 15),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(vertical: 14),
                           ),
@@ -567,13 +558,13 @@ class CommunityChatScreen extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
-                            colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                            colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                           ),
                           shape: BoxShape.circle,
-                          boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))],
+                          boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))],
                         ),
                         child: controller.isSending.value
                             ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
@@ -603,7 +594,7 @@ class CommunityChatScreen extends StatelessWidget {
       SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-            color: Colors.white,
+            color: AppThemeColors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(

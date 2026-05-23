@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../../app_export.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -37,7 +38,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     final controller = Get.find<HistoryCtrl>();
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppThemeColors.bgCream,
       body: SafeArea(
         bottom: false,
         top: false,
@@ -48,7 +49,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             children: [
               _buildHeader(controller),
               // _buildStatsSection(controller),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildSearchAndFilters(controller),
               Expanded(
                 child: Obx(() {
@@ -60,8 +61,8 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                   }
                   return RefreshIndicator(
                     onRefresh: controller.fetchHistory,
-                    color: Constant.instance.primary,
-                    backgroundColor: Colors.white,
+                    color: AppThemeColors.primaryOrange,
+                    backgroundColor: AppThemeColors.white,
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       itemCount: controller.bookings.length,
@@ -89,10 +90,10 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+          colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
         ),
         borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-        boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
+        boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 50, 24, 20),
@@ -103,7 +104,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
                   child: const Icon(Icons.history_rounded, color: Colors.white, size: 28),
                 ),
                 const SizedBox(width: 16),
@@ -111,11 +112,11 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Your Journeys", style: AppTextStyle.bold.copyWith(fontSize: 25, color: Colors.white, letterSpacing: -0.8, height: 1.1)),
+                      Text("Your Journeys", style: AppTextStyle.bold.copyWith(fontSize: 25, color: AppThemeColors.white, letterSpacing: -0.8, height: 1.1)),
                       const SizedBox(height: 4),
                       Text(
                         "Relive your memories and plan for the next one",
-                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: Colors.white.withValues(alpha: 0.9), height: 1.3),
+                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.white.withValues(alpha: 0.9), height: 1.3),
                       ),
                     ],
                   ),
@@ -136,18 +137,14 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
           Expanded(
             child: Container(
               height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4))],
-              ),
+              decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(16), boxShadow: AppThemeStyles.shadowLight),
               child: TextField(
                 controller: controller.searchController,
                 onChanged: controller.onSearchChanged,
                 decoration: InputDecoration(
                   hintText: "Search by Booking ID, Destination",
-                  hintStyle: AppTextStyle.medium.copyWith(color: Colors.grey.shade400, fontSize: 13),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey.shade400, size: 20),
+                  hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText.withValues(alpha: 0.5), fontSize: 13),
+                  prefixIcon: Icon(Icons.search, color: AppThemeColors.greyText.withValues(alpha: 0.5), size: 20),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 15),
                 ),
@@ -160,14 +157,14 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: Constant.instance.primary.withValues(alpha: 0.05),
+                color: AppThemeColors.primaryOrange.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Constant.instance.primary.withValues(alpha: 0.1)),
+                border: Border.all(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1)),
               ),
               child: Center(
                 child: Text(
                   "${controller.totalTrips.value} TOTAL TRIPS",
-                  style: AppTextStyle.bold.copyWith(color: Constant.instance.primary, fontSize: 10, letterSpacing: 0.5),
+                  style: AppTextStyle.bold.copyWith(color: AppThemeColors.primaryOrange, fontSize: 10, letterSpacing: 0.5),
                 ),
               ),
             ),
@@ -189,12 +186,9 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 20, offset: const Offset(0, 8)),
-          BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2)),
-        ],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge),
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +199,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
               Hero(
                 tag: 'history_image_$index',
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(AppThemeStyles.radiusXLarge)),
                   child: Container(
                     height: 200,
                     width: double.infinity,
@@ -234,20 +228,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [BoxShadow(color: _getStatusColor(status).withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
                   ),
-                  child: Text(status.toUpperCase(), style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 11, letterSpacing: 0.5)),
-                ),
-              ),
-              Positioned(
-                top: 16,
-                right: 16,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 2))],
-                  ),
-                  child: Icon(Icons.favorite_border_rounded, size: 20, color: Constant.instance.primary),
+                  child: Text(status.toUpperCase(), style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 11, letterSpacing: 0.5)),
                 ),
               ),
             ],
@@ -262,13 +243,13 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
+                      decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.confirmation_number_rounded, size: 14, color: Constant.instance.primary),
+                          Icon(Icons.confirmation_number_rounded, size: 14, color: AppThemeColors.primaryOrange),
                           const SizedBox(width: 4),
-                          Text(bookingId, style: AppTextStyle.bold.copyWith(fontSize: 12, color: Constant.instance.primary)),
+                          Text(bookingId, style: AppTextStyle.bold.copyWith(fontSize: 12, color: AppThemeColors.primaryOrange)),
                         ],
                       ),
                     ),
@@ -277,16 +258,16 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                 const SizedBox(height: 12),
                 Text(
                   title,
-                  style: AppTextStyle.bold.copyWith(fontSize: 20, color: const Color(0xFF1E293B), height: 1.2),
+                  style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.blackText, height: 1.2),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Expanded(child: _buildInfoItem(Icons.calendar_today_rounded, travelDate, Constant.instance.primary)),
+                    Expanded(child: _buildInfoItem(Icons.calendar_today_rounded, travelDate, AppThemeColors.primaryOrange)),
                     const SizedBox(width: 16),
-                    Expanded(child: _buildInfoItem(Icons.location_on_rounded, destination, Constant.instance.orange)),
+                    Expanded(child: _buildInfoItem(Icons.location_on_rounded, destination, AppThemeColors.warning)),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -299,17 +280,17 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                        colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                       ),
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                      boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("View Trip Details", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.white)),
+                        Text("View Trip Details", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.white)),
                         const SizedBox(width: 8),
-                        const Icon(Icons.arrow_forward_rounded, size: 18, color: Colors.white),
+                        const Icon(Icons.arrow_forward_rounded, size: 18, color: AppThemeColors.white),
                       ],
                     ),
                   ),
@@ -338,7 +319,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
           Flexible(
             child: Text(
               label,
-              style: AppTextStyle.medium.copyWith(fontSize: 13, color: const Color(0xFF64748B)),
+              style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.greyText),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -356,23 +337,24 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
       return Container(
         margin: const EdgeInsets.fromLTRB(20, 20, 20, 16),
         padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 2))],
-        ),
+        decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(20), boxShadow: AppThemeStyles.shadowLight),
         child: Row(
           children: [
             Expanded(
-              child: _buildStatItem(icon: Icons.flight_takeoff_rounded, label: "Total Trips", value: totalTrips.toString(), color: Constant.instance.primary),
+              child: _buildStatItem(
+                icon: Icons.flight_takeoff_rounded,
+                label: "Total Trips",
+                value: totalTrips.toString(),
+                color: AppThemeColors.primaryOrange,
+              ),
             ),
-            Container(width: 1, height: 40, color: const Color(0xFFE2E8F0)),
+            Container(width: 1, height: 40, color: AppThemeColors.borderLight),
             Expanded(
-              child: _buildStatItem(icon: Icons.check_circle_rounded, label: "Completed", value: completedTrips.toString(), color: Constant.instance.green2),
+              child: _buildStatItem(icon: Icons.check_circle_rounded, label: "Completed", value: completedTrips.toString(), color: AppThemeColors.success),
             ),
-            Container(width: 1, height: 40, color: const Color(0xFFE2E8F0)),
+            Container(width: 1, height: 40, color: AppThemeColors.borderLight),
             Expanded(
-              child: _buildStatItem(icon: Icons.schedule_rounded, label: "Upcoming", value: upcomingTrips.toString(), color: Constant.instance.orange),
+              child: _buildStatItem(icon: Icons.schedule_rounded, label: "Upcoming", value: upcomingTrips.toString(), color: AppThemeColors.warning),
             ),
           ],
         ),
@@ -389,9 +371,9 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
           child: Icon(icon, color: color, size: 20),
         ),
         const SizedBox(height: 8),
-        Text(value, style: AppTextStyle.bold.copyWith(fontSize: 18, color: const Color(0xFF1E293B))),
+        Text(value, style: AppTextStyle.bold.copyWith(fontSize: 18, color: AppThemeColors.blackText)),
         const SizedBox(height: 2),
-        Text(label, style: AppTextStyle.medium.copyWith(fontSize: 12, color: const Color(0xFF64748B))),
+        Text(label, style: AppTextStyle.medium.copyWith(fontSize: 12, color: AppThemeColors.greyText)),
       ],
     );
   }
@@ -401,21 +383,21 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppThemeColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE2E8F0)),
+          border: Border.all(color: AppThemeColors.borderLight),
           boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
         ),
         child: TextField(
           controller: controller.searchController,
           onChanged: controller.onSearchChanged,
-          style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF1E293B)),
+          style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText),
           decoration: InputDecoration(
             hintText: "Search by Booking ID or Destination...",
-            hintStyle: AppTextStyle.medium.copyWith(color: const Color(0xFF94A3B8), fontSize: 15),
+            hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText, fontSize: 15),
             prefixIcon: Container(
               padding: const EdgeInsets.all(12),
-              child: Icon(Icons.search_rounded, color: Constant.instance.primary.withValues(alpha: 0.7), size: 20),
+              child: Icon(Icons.search_rounded, color: AppThemeColors.primaryOrange.withValues(alpha: 0.7), size: 20),
             ),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -434,26 +416,26 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-              child: Icon(Icons.luggage_rounded, size: 64, color: Constant.instance.primary),
+              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(Icons.luggage_rounded, size: 64, color: AppThemeColors.primaryOrange),
             ),
             const SizedBox(height: 24),
-            Text("No Journeys Yet", style: AppTextStyle.bold.copyWith(fontSize: 24, color: const Color(0xFF1E293B))),
+            Text("No Journeys Yet", style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.blackText)),
             const SizedBox(height: 12),
             Text(
               "Your travel history will appear here once you start booking trips with us.",
               textAlign: TextAlign.center,
-              style: AppTextStyle.medium.copyWith(fontSize: 16, color: const Color(0xFF64748B), height: 1.5),
+              style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.greyText, height: 1.5),
             ),
             const SizedBox(height: 32),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                color: Constant.instance.primary,
+                color: AppThemeColors.primaryOrange,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
               ),
-              child: Text("Start Your Journey", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: Colors.white)),
+              child: Text("Start Your Journey", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: AppThemeColors.white)),
             ),
           ],
         ),
@@ -464,15 +446,15 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'confirmed':
-        return const Color(0xFF3B82F6);
+        return AppThemeColors.info;
       case 'completed':
-        return const Color(0xFF10B981);
+        return AppThemeColors.success;
       case 'pending':
-        return const Color(0xFFF59E0B);
+        return AppThemeColors.warning;
       case 'cancelled':
-        return const Color(0xFFEF4444);
+        return AppThemeColors.error;
       default:
-        return Colors.grey;
+        return AppThemeColors.greyText;
     }
   }
 }

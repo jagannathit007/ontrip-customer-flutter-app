@@ -1,5 +1,6 @@
 import 'dart:io';
 import '../../../../../app_export.dart';
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../source/selfie_ui.dart';
 import '../common/media_display_screen.dart';
 
@@ -19,16 +20,11 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
             }
           },
           child: Scaffold(
-            backgroundColor: const Color(0xFFF8FAFC),
+            backgroundColor: AppThemeColors.bgCream,
             appBar: AppBar(
               title: Text(
-                controller.selectionMode.value 
-                    ? "${controller.selectedMediaIds.length} selected" 
-                    : "Community Gallery",
-                style: AppTextStyle.bold.copyWith(
-                  color: const Color(0xFF1E293B),
-                  fontSize: 22,
-                ),
+                controller.selectionMode.value ? "${controller.selectedMediaIds.length} selected" : "Community Gallery",
+                style: AppTextStyle.bold.copyWith(color: AppThemeColors.blackText, fontSize: 22),
               ),
               centerTitle: true,
               leading: IconButton(
@@ -45,40 +41,33 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   //   color: const Color(0xFFF1F5F9),
                   //   // borderRadius: BorderRadius.circular(12),
                   // ),
-                  child: const Icon(
-                    Icons.arrow_back_ios_new,
-                    size: 16,
-                    color: Color(0xFF1E293B),
-                  ),
+                  child: const Icon(Icons.arrow_back_ios_new, size: 16, color: AppThemeColors.blackText),
                 ),
               ),
               actions: [_buildAppBarActions(context)],
               elevation: 0,
-              surfaceTintColor: Colors.white,
-              shadowColor: Colors.black.withValues(alpha: 0.1),
+              surfaceTintColor: AppThemeColors.white,
+              shadowColor: AppThemeColors.shadowMedium,
               scrolledUnderElevation: 8,
-              backgroundColor: Colors.white,
+              backgroundColor: AppThemeColors.white,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(70),
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8FAFC),
+                    color: AppThemeColors.bgCream,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                    border: Border.all(color: AppThemeColors.borderLight),
                   ),
                   child: TabBar(
                     onTap: (index) => controller.switchTab(index),
                     labelColor: Colors.white,
-                    unselectedLabelColor: const Color(0xFF64748B),
+                    unselectedLabelColor: AppThemeColors.greyText,
                     indicator: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Constant.instance.primary,
-                          Constant.instance.primary.withValues(alpha: 0.8),
-                        ],
+                        colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -94,12 +83,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                 ),
               ),
             ),
-            body: TabBarView(
-              children: [
-                _buildAllPhotosTab(),
-                _buildMyPhotosTab(context),
-              ],
-            ),
+            body: TabBarView(children: [_buildAllPhotosTab(), _buildMyPhotosTab(context)]),
           ),
         ),
       ),
@@ -116,7 +100,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
         return _buildEmptyState();
       }
 
-      return NotificationListener<ScrollNotification>( 
+      return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
             controller.loadMore();
@@ -125,24 +109,16 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
         },
         child: RefreshIndicator(
           onRefresh: () => controller.fetchImages(refresh: true),
-          color: Constant.instance.primary,
-          backgroundColor: Colors.white,
+          color: AppThemeColors.primaryOrange,
+          backgroundColor: AppThemeColors.white,
           child: GridView.builder(
             padding: const EdgeInsets.all(20),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 1,
-            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 12, mainAxisSpacing: 12, childAspectRatio: 1),
             itemCount: controller.images.length + (controller.isLoading.value ? 3 : 0),
             itemBuilder: (context, index) {
               if (index >= controller.images.length) {
                 return Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  decoration: BoxDecoration(color: AppThemeColors.borderLight.withValues(alpha: 0.5), borderRadius: BorderRadius.circular(16)),
                   child: const Center(child: CustomLoadingIndicator()),
                 );
               }
@@ -164,12 +140,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                     controller.toggleSelectionMode(true);
                     controller.toggleMediaSelection(image);
                   },
-                  child: _buildMediaTile(
-                    media: image,
-                    isSelected: isSelected,
-                    showSelectionUi: isSelectionMode,
-                    showOwnerTag: controller.isOwnMedia(image),
-                  ),
+                  child: _buildMediaTile(media: image, isSelected: isSelected, showSelectionUi: isSelectionMode, showOwnerTag: controller.isOwnMedia(image)),
                 );
               });
             },
@@ -187,68 +158,33 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
         children: [
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
+            decoration: AppThemeStyles.cardDecoration(color: AppThemeColors.white, radius: AppThemeStyles.radiusLarge, shadows: AppThemeStyles.shadowLight),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Constant.instance.primary,
-                        Constant.instance.primary.withValues(alpha: 0.8),
-                      ],
+                      colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Icon(
-                    Icons.face_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  child: const Icon(Icons.face_rounded, color: Colors.white, size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "My Photos",
-                        style: AppTextStyle.bold.copyWith(
-                          fontSize: 20,
-                          color: const Color(0xFF1E293B),
-                        ),
-                      ),
+                      Text("My Photos", style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.blackText)),
                       const SizedBox(height: 4),
                       Obx(() {
                         if (controller.faceStatus.value == FaceStatus.hasMatches) {
-                          return Text(
-                            "Found your photos in the gallery",
-                            style: AppTextStyle.medium.copyWith(
-                              fontSize: 14,
-                              color: const Color(0xFF64748B),
-                            ),
-                          );
+                          return Text("Found your photos in the gallery", style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText));
                         }
-                        return Text(
-                          "Find yourself in the collection",
-                          style: AppTextStyle.medium.copyWith(
-                            fontSize: 14,
-                            color: const Color(0xFF64748B),
-                          ),
-                        );
+                        return Text("Find yourself in the collection", style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText));
                       }),
                     ],
                   ),
@@ -270,15 +206,10 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Constant.instance.primary.withValues(alpha: 0.1),
-            Constant.instance.primary.withValues(alpha: 0.05),
-          ],
+          colors: [AppThemeColors.primaryOrange.withValues(alpha: 0.1), AppThemeColors.primaryOrange.withValues(alpha: 0.05)],
         ),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Constant.instance.primary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppThemeColors.borderOrange),
       ),
       child: Material(
         color: Colors.transparent,
@@ -290,19 +221,9 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.refresh_rounded,
-                  size: 18,
-                  color: Constant.instance.primary,
-                ),
+                const Icon(Icons.refresh_rounded, size: 18, color: AppThemeColors.primaryOrange),
                 const SizedBox(width: 8),
-                Text(
-                  "Refresh",
-                  style: AppTextStyle.semiBold.copyWith(
-                    fontSize: 14,
-                    color: Constant.instance.primary,
-                  ),
-                ),
+                Text("Refresh", style: AppTextStyle.semiBold.copyWith(fontSize: 14, color: AppThemeColors.primaryOrange)),
               ],
             ),
           ),
@@ -320,17 +241,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
           insetPadding: const EdgeInsets.symmetric(horizontal: 20),
           child: Container(
             padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
+            decoration: AppThemeStyles.cardDecoration(color: AppThemeColors.white, radius: AppThemeStyles.radiusXLarge, shadows: AppThemeStyles.shadowLarge),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,26 +249,13 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Refresh Photos",
-                      style: AppTextStyle.bold.copyWith(
-                        fontSize: 22,
-                        color: const Color(0xFF1E293B),
-                      ),
-                    ),
+                    Text("Refresh Photos", style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.blackText)),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon: Container(
                         padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF1F5F9),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.close_rounded,
-                          size: 16,
-                          color: Color(0xFF64748B),
-                        ),
+                        decoration: BoxDecoration(color: AppThemeColors.bgCream, borderRadius: BorderRadius.circular(8)),
+                        child: const Icon(Icons.close_rounded, size: 16, color: AppThemeColors.greyText),
                       ),
                     ),
                   ],
@@ -367,7 +265,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   icon: Icons.refresh_rounded,
                   title: "Use Existing Image",
                   subtitle: "Re-scan using your current selfie",
-                  color: Constant.instance.primary,
+                  color: AppThemeColors.primaryOrange,
                   onTap: () {
                     Navigator.pop(context);
                     controller.checkFaceMatches();
@@ -378,7 +276,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   icon: Icons.camera_alt_rounded,
                   title: "Take New Selfie",
                   subtitle: "Use a different photo for search",
-                  color: Constant.instance.green2,
+                  color: AppThemeColors.success,
                   onTap: () {
                     Navigator.pop(context);
                     _openSelfieUI(context);
@@ -392,13 +290,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     );
   }
 
-  Widget _buildRefreshOption({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildRefreshOption({required IconData icon, required String title, required String subtitle, required Color color, required VoidCallback onTap}) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -409,31 +301,16 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
           decoration: BoxDecoration(
             color: color.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: color.withValues(alpha: 0.1),
-            ),
+            border: Border.all(color: color.withValues(alpha: 0.1)),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      color,
-                      color.withValues(alpha: 0.8),
-                    ],
-                  ),
+                  gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [color, color.withValues(alpha: 0.8)]),
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.3),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  boxShadow: [BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
                 ),
                 child: Icon(icon, color: Colors.white, size: 20),
               ),
@@ -442,29 +319,13 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: AppTextStyle.bold.copyWith(
-                        fontSize: 16,
-                        color: const Color(0xFF1E293B),
-                      ),
-                    ),
+                    Text(title, style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                     const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: AppTextStyle.medium.copyWith(
-                        fontSize: 14,
-                        color: const Color(0xFF64748B),
-                      ),
-                    ),
+                    Text(subtitle, style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText)),
                   ],
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
-                color: color,
-              ),
+              Icon(Icons.arrow_forward_ios_rounded, size: 16, color: color),
             ],
           ),
         ),
@@ -476,17 +337,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     if (controller.faceStatus.value == FaceStatus.loading) {
       return Container(
         padding: const EdgeInsets.all(40),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        decoration: AppThemeStyles.cardDecoration(color: AppThemeColors.white, radius: AppThemeStyles.radiusLarge, shadows: AppThemeStyles.shadowLight),
         child: const Center(child: CustomLoadingIndicator()),
       );
     }
@@ -494,25 +345,11 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     if (controller.faceStatus.value == FaceStatus.hasMatches && controller.matchedImages.isNotEmpty) {
       return Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        decoration: AppThemeStyles.cardDecoration(color: AppThemeColors.white, radius: AppThemeStyles.radiusLarge, shadows: AppThemeStyles.shadowLight),
         child: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12),
           itemCount: controller.matchedImages.length,
           itemBuilder: (context, index) {
             final image = controller.matchedImages[index];
@@ -532,12 +369,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   controller.toggleSelectionMode(true);
                   controller.toggleMediaSelection(image);
                 },
-                child: _buildMediaTile(
-                  media: image,
-                  isSelected: isSelected,
-                  showSelectionUi: isSelectionMode,
-                  showOwnerTag: controller.isOwnMedia(image),
-                ),
+                child: _buildMediaTile(media: image, isSelected: isSelected, showSelectionUi: isSelectionMode, showOwnerTag: controller.isOwnMedia(image)),
               );
             });
           },
@@ -569,25 +401,14 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     Get.to(() => MediaDisplayScreen(url: url, isVideo: controller.isVideoMedia(media)));
   }
 
-  Widget _buildMediaTile({
-    required CommunityImage media,
-    required bool isSelected,
-    required bool showSelectionUi,
-    bool showOwnerTag = false,
-  }) {
+  Widget _buildMediaTile({required CommunityImage media, required bool isSelected, required bool showSelectionUi, bool showOwnerTag = false}) {
     final resolved = controller.resolveMediaUrl(media);
     final isVideo = controller.isVideoMedia(media);
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -602,19 +423,9 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.7),
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
                   ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  child: const Icon(Icons.play_arrow_rounded, color: Colors.white, size: 24),
                 ),
               ),
             if (showSelectionUi)
@@ -625,29 +436,12 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: isSelected 
-                        ? Constant.instance.primary 
-                        : Colors.white.withValues(alpha: 0.9),
+                    color: isSelected ? AppThemeColors.primaryOrange : Colors.white.withValues(alpha: 0.9),
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected 
-                          ? Constant.instance.primary 
-                          : const Color(0xFFCBD5E1),
-                      width: 2,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    border: Border.all(color: isSelected ? AppThemeColors.primaryOrange : AppThemeColors.borderLight, width: 2),
+                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 4, offset: const Offset(0, 2))],
                   ),
-                  child: Icon(
-                    isSelected ? Icons.check_rounded : null,
-                    size: 16,
-                    color: Colors.white,
-                  ),
+                  child: Icon(isSelected ? Icons.check_rounded : null, size: 16, color: Colors.white),
                 ),
               ),
             if (showOwnerTag)
@@ -657,39 +451,20 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Constant.instance.primary,
-                        Constant.instance.primary.withValues(alpha: 0.8),
-                      ],
+                      colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                     ),
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Constant.instance.primary.withValues(alpha: 0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 4, offset: const Offset(0, 2))],
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
-                        isVideo ? Icons.video_library_rounded : Icons.person_rounded,
-                        color: Colors.white,
-                        size: 12,
-                      ),
+                      Icon(isVideo ? Icons.video_library_rounded : Icons.person_rounded, color: Colors.white, size: 12),
                       const SizedBox(width: 4),
-                      Text(
-                        isVideo ? "My Video" : "My Photo",
-                        style: AppTextStyle.bold.copyWith(
-                          color: Colors.white,
-                          fontSize: 10,
-                        ),
-                      ),
+                      Text(isVideo ? "My Video" : "My Photo", style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 10)),
                     ],
                   ),
                 ),
@@ -709,33 +484,16 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Constant.instance.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.photo_library_rounded,
-                size: 64,
-                color: Constant.instance.primary,
-              ),
+              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: const Icon(Icons.photo_library_rounded, size: 64, color: AppThemeColors.primaryOrange),
             ),
             const SizedBox(height: 24),
-            Text(
-              "No Photos Found",
-              style: AppTextStyle.bold.copyWith(
-                fontSize: 24,
-                color: const Color(0xFF1E293B),
-              ),
-            ),
+            Text("No Photos Found", style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.blackText)),
             const SizedBox(height: 12),
             Text(
               "No images found in this community gallery yet.",
               textAlign: TextAlign.center,
-              style: AppTextStyle.medium.copyWith(
-                fontSize: 16,
-                color: const Color(0xFF64748B),
-                height: 1.5,
-              ),
+              style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.greyText, height: 1.5),
             ),
           ],
         ),
@@ -747,17 +505,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+      decoration: AppThemeStyles.cardDecoration(color: AppThemeColors.white, radius: AppThemeStyles.radiusLarge, shadows: AppThemeStyles.shadowLight),
       child: Column(
         children: [
           Container(
@@ -766,77 +514,39 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Constant.instance.primary.withValues(alpha: 0.1),
-                  Constant.instance.primary.withValues(alpha: 0.05),
-                ],
+                colors: [AppThemeColors.primaryOrange.withValues(alpha: 0.1), AppThemeColors.primaryOrange.withValues(alpha: 0.05)],
               ),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.face_rounded,
-              size: 48,
-              color: Constant.instance.primary,
-            ),
+            child: const Icon(Icons.face_rounded, size: 48, color: AppThemeColors.primaryOrange),
           ),
           const SizedBox(height: 24),
-          Text(
-            "No Photos Found",
-            style: AppTextStyle.bold.copyWith(
-              fontSize: 22,
-              color: const Color(0xFF1E293B),
-            ),
-          ),
+          Text("No Photos Found", style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.blackText)),
           const SizedBox(height: 12),
           Text(
             "Take a selfie to find your photos from this collection automatically.",
             textAlign: TextAlign.center,
-            style: AppTextStyle.medium.copyWith(
-              fontSize: 15,
-              color: const Color(0xFF64748B),
-              height: 1.4,
-            ),
+            style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.4),
           ),
           const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Constant.instance.primary,
-                    Constant.instance.primary.withValues(alpha: 0.8),
-                  ],
-                ),
+                gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Constant.instance.primary.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: ElevatedButton.icon(
                 onPressed: () => _openSelfieUI(context),
                 icon: const Icon(Icons.camera_alt_rounded),
-                label: Text(
-                  "Take a Selfie",
-                  style: AppTextStyle.semiBold.copyWith(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
+                label: Text("Take a Selfie", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   foregroundColor: Colors.white,
                   shadowColor: Colors.transparent,
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
               ),
             ),
@@ -867,16 +577,16 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
               child: Row(
                 children: [
-                  Icon(allSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: const Color(0xFF1E293B)),
+                  Icon(allSelected ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded, color: AppThemeColors.blackText),
                   const SizedBox(width: 4),
-                  Text(allSelected ? "Unselect all" : "Select all", style: const TextStyle(color: Color(0xFF1E293B), fontSize: 13)),
+                  Text(allSelected ? "Unselect all" : "Select all", style: const TextStyle(color: AppThemeColors.blackText, fontSize: 13)),
                 ],
               ),
             ),
           ),
           IconButton(
             onPressed: controller.selectedMediaIds.isEmpty ? null : () => controller.downloadSelectedMedia(),
-            icon: const Icon(Icons.download_rounded, color: Color(0xFF1E293B)),
+            icon: const Icon(Icons.download_rounded, color: AppThemeColors.blackText),
           ),
           IconButton(
             onPressed: controller.selectedMediaIds.isEmpty ? null : () => _confirmDeleteSelected(context),
@@ -887,7 +597,7 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
     }
     return IconButton(
       onPressed: () => controller.fetchImages(refresh: true),
-      icon: const Icon(Icons.refresh, color: Color(0xFF1E293B)),
+      icon: const Icon(Icons.refresh, color: AppThemeColors.blackText),
     );
   }
 

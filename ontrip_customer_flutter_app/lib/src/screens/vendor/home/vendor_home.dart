@@ -1,3 +1,4 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../../../app_export.dart';
 import 'vendor_home_ctrl.dart';
 
@@ -48,7 +49,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
     final authCtrl = Get.find<AuthenticationController>();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppThemeColors.bgCream,
       body: FadeTransition(
         opacity: _fadeAnimation,
         child: Column(
@@ -59,10 +60,10 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Constant.instance.primary, Constant.instance.primary.withValues(alpha: 0.8)],
+                  colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
                 ),
                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-                boxShadow: [BoxShadow(color: Constant.instance.primary.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
               ),
               child: SafeArea(
                 bottom: false,
@@ -70,26 +71,54 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                   padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
                   child: Row(
                     children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppThemeColors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 8))],
+                        ),
+                        padding: const EdgeInsets.all(3),
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)]),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              (authCtrl.userAuthData['name']?.toString().isNotEmpty ?? false) ? authCtrl.userAuthData['name'][0].toUpperCase() : 'V',
+                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 24),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.all(12),
+                      //   decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
+                      //   child: const Icon(Icons.store_rounded, color: AppThemeColors.white, size: 28),
+                      // ),
+                      SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(_greeting, style: AppTextStyle.medium.copyWith(fontSize: 14, color: Colors.white.withValues(alpha: 0.8))),
+                            Text(_greeting, style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.white.withValues(alpha: 0.8))),
                             const SizedBox(height: 4),
                             Obx(
                               () => Text(
                                 authCtrl.userAuthData['name'] ?? 'Vendor',
-                                style: AppTextStyle.bold.copyWith(fontSize: 22, color: Colors.white, letterSpacing: -0.5),
+                                style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.white, letterSpacing: -0.5),
                               ),
                             ),
                             const SizedBox(height: 4),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
                               child: Obx(
                                 () => Text(
                                   (authCtrl.userAuthData['type'] ?? 'vendor').toString().toUpperCase(),
-                                  style: AppTextStyle.bold.copyWith(fontSize: 10, color: Colors.white, letterSpacing: 1),
+                                  style: AppTextStyle.bold.copyWith(fontSize: 10, color: AppThemeColors.white, letterSpacing: 1),
                                 ),
                               ),
                             ),
@@ -104,20 +133,17 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                             Get.put(NotificationCtrl());
                           }
                           final notificationCtrl = Get.find<NotificationCtrl>();
-                          
+
                           return GestureDetector(
                             onTap: () => Get.toNamed(RouteNames.notifications),
                             child: Container(
                               margin: const EdgeInsets.only(right: 16),
                               padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
-                                  const Icon(Icons.notifications_outlined, color: Colors.white, size: 24),
+                                  const Icon(Icons.notifications_outlined, color: AppThemeColors.white, size: 24),
                                   Obx(() {
                                     if (notificationCtrl.unreadCount.value > 0) {
                                       return Positioned(
@@ -126,15 +152,15 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                                         child: Container(
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                            color: const Color(0xFFEF4444),
+                                            color: AppThemeColors.error,
                                             shape: BoxShape.circle,
-                                            border: Border.all(color: Constant.instance.primary, width: 2),
+                                            border: Border.all(color: AppThemeColors.primaryOrange, width: 2),
                                           ),
                                           constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                                           child: Center(
                                             child: Text(
                                               notificationCtrl.unreadCount.value > 99 ? '99+' : '${notificationCtrl.unreadCount.value}',
-                                              style: AppTextStyle.bold.copyWith(color: Colors.white, fontSize: 9),
+                                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 9),
                                             ),
                                           ),
                                         ),
@@ -147,11 +173,6 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                             ),
                           );
                         },
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
-                        child: const Icon(Icons.store_rounded, color: Colors.white, size: 28),
                       ),
                     ],
                   ),
@@ -170,8 +191,8 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                 }
                 return RefreshIndicator(
                   onRefresh: ctrl.fetchPackages,
-                  color: Constant.instance.primary,
-                  backgroundColor: Colors.white,
+                  color: AppThemeColors.primaryOrange,
+                  backgroundColor: AppThemeColors.white,
                   child: ListView.builder(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
                     itemCount: ctrl.packages.length,
@@ -192,16 +213,16 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 20, offset: const Offset(0, 8))],
+        color: AppThemeColors.white,
+        borderRadius: BorderRadius.circular(AppThemeStyles.radiusXLarge),
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Cover image
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(AppThemeStyles.radiusXLarge)),
             child: Stack(
               children: [
                 CustomNetworkImage(imageUrl: imageUrl, height: 200, width: double.infinity),
@@ -212,7 +233,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(color: _statusColor(pkg.status), borderRadius: BorderRadius.circular(10)),
-                    child: Text(pkg.status.toUpperCase(), style: AppTextStyle.bold.copyWith(fontSize: 10, color: Colors.white, letterSpacing: 0.5)),
+                    child: Text(pkg.status.toUpperCase(), style: AppTextStyle.bold.copyWith(fontSize: 10, color: AppThemeColors.white, letterSpacing: 0.5)),
                   ),
                 ),
                 // Days badge
@@ -224,7 +245,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                     decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.55), borderRadius: BorderRadius.circular(10)),
                     child: Text(
                       '${pkg.totalDays} ${pkg.totalDays == 1 ? "Day" : "Days"}',
-                      style: AppTextStyle.bold.copyWith(fontSize: 11, color: Colors.white),
+                      style: AppTextStyle.bold.copyWith(fontSize: 11, color: AppThemeColors.white),
                     ),
                   ),
                 ),
@@ -238,21 +259,21 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(pkg.title, style: AppTextStyle.bold.copyWith(fontSize: 18, color: const Color(0xFF1E293B))),
+                Text(pkg.title, style: AppTextStyle.bold.copyWith(fontSize: 18, color: AppThemeColors.blackText)),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Icon(Icons.location_on_rounded, size: 16, color: Constant.instance.primary),
+                    Icon(Icons.location_on_rounded, size: 16, color: AppThemeColors.primaryOrange),
                     const SizedBox(width: 4),
-                    Text(pkg.destination, style: AppTextStyle.medium.copyWith(fontSize: 13, color: const Color(0xFF64748B))),
+                    Text(pkg.destination, style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.greyText)),
                   ],
                 ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    _buildInfoChip(Icons.currency_rupee_rounded, '${pkg.currency} ${pkg.basePrice.toStringAsFixed(0)}', Constant.instance.primary),
+                    _buildInfoChip(Icons.currency_rupee_rounded, '${pkg.currency} ${pkg.basePrice.toStringAsFixed(0)}', AppThemeColors.primaryOrange),
                     const SizedBox(width: 10),
-                    _buildInfoChip(Icons.people_outline_rounded, 'Max ${pkg.maxCapacity}', Constant.instance.orange),
+                    _buildInfoChip(Icons.people_outline_rounded, 'Max ${pkg.maxCapacity}', AppThemeColors.warning),
                   ],
                 ),
               ],
@@ -291,16 +312,16 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
           children: [
             Container(
               padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(color: Constant.instance.primary.withValues(alpha: 0.1), shape: BoxShape.circle),
-              child: Icon(Icons.inventory_2_outlined, size: 56, color: Constant.instance.primary),
+              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), shape: BoxShape.circle),
+              child: Icon(Icons.inventory_2_outlined, size: 56, color: AppThemeColors.primaryOrange),
             ),
             const SizedBox(height: 24),
-            Text('No Packages Yet', style: AppTextStyle.bold.copyWith(fontSize: 22, color: const Color(0xFF1E293B))),
+            Text('No Packages Yet', style: AppTextStyle.bold.copyWith(fontSize: 22, color: AppThemeColors.blackText)),
             const SizedBox(height: 10),
             Text(
               'Your packages will appear here once they are created.',
               textAlign: TextAlign.center,
-              style: AppTextStyle.medium.copyWith(fontSize: 15, color: const Color(0xFF64748B), height: 1.5),
+              style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.5),
             ),
           ],
         ),
@@ -311,13 +332,13 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
   Color _statusColor(String status) {
     switch (status.toLowerCase()) {
       case 'approved':
-        return const Color(0xFF10B981);
+        return AppThemeColors.success;
       case 'pending':
-        return const Color(0xFFF59E0B);
+        return AppThemeColors.warning;
       case 'rejected':
-        return const Color(0xFFEF4444);
+        return AppThemeColors.error;
       default:
-        return Colors.grey;
+        return AppThemeColors.greyText;
     }
   }
 }

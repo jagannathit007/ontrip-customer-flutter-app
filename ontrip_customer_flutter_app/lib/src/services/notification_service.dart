@@ -45,20 +45,53 @@ class NotificationService {
       },
     );
 
+    // Create notification channel for Android
+    await _createNotificationChannel();
+
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
 
     // Request permission for Android 13+ and iOS
     await FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
+
+    debugPrint('✅ Notification service initialized');
+  }
+
+  /// Create notification channel for Android
+  Future<void> _createNotificationChannel() async {
+    if (GetPlatform.isAndroid) {
+      const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'task_reminder_high', // id
+        'OnTrip Alerts', // name
+        description: 'High priority alerts and trip reminders',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+        enableLights: true,
+        showBadge: true,
+      );
+
+      await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+
+      debugPrint('✅ Notification channel created: ${channel.id}');
+    }
   }
 
   void showRemoteNotificationAndroid(RemoteMessage message) async {
     bool isNotificationEnabled = GetStorage().read(StringConstants.notificationEnabled) ?? true;
-    if (!isNotificationEnabled) return;
+    if (!isNotificationEnabled) {
+      debugPrint('❌ Notifications disabled by user');
+      return;
+    }
 
-    if (Get.currentRoute.split('?').first == RouteNames.communityChat) return;
+    if (Get.currentRoute.split('?').first == RouteNames.communityChat) {
+      debugPrint('❌ Skipping notification - already in community chat');
+      return;
+    }
 
     RemoteNotification? notification = message.notification;
     if (notification != null) {
+      debugPrint('🔔 Showing notification: ${notification.title}');
+
       NotificationDetails notificationDetails = const NotificationDetails(
         android: AndroidNotificationDetails(
           "task_reminder_high",
@@ -75,14 +108,23 @@ class NotificationService {
         ),
         iOS: DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true),
       );
-      _whistle("slow_spring_board.mp3");
-      await flutterLocalNotificationsPlugin.show(
-        id: notification.hashCode,
-        title: notification.title,
-        body: notification.body,
-        notificationDetails: notificationDetails,
-        payload: json.encode(message.data),
-      );
+
+      try {
+        _whistle("slow_spring_board.mp3");
+        await flutterLocalNotificationsPlugin.show(
+          // notification.hashCode,
+          title: notification.title,
+          body: notification.body,
+          notificationDetails: notificationDetails,
+          payload: json.encode(message.data),
+          id: notification.hashCode,
+        );
+        debugPrint('✅ Notification shown successfully');
+      } catch (e) {
+        debugPrint('❌ Error showing notification: $e');
+      }
+    } else {
+      debugPrint('❌ No notification object in message');
     }
   }
 

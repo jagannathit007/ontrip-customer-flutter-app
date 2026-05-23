@@ -1,21 +1,22 @@
 import '../../../../../app_export.dart';
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 
 class GroupMembersScreen extends StatelessWidget {
   const GroupMembersScreen({super.key});
 
-  static const Color _bgCream = Color(0xFFFCFAF2);
+  static final Color _bgCream = AppThemeColors.bgCream;
   static const Color _teal = Color(0xFF0E736A);
   static const Color _lightTeal = Color(0xFFE1F2EF);
-  static const Color _orangeText = Color(0xFFEF6C33);
-  static const Color _orangeBg = Color(0xFFFFEDE5);
+  static final Color _orangeText = AppThemeColors.primaryOrange;
+  static final Color _orangeBg = AppThemeColors.primaryOrange.withValues(alpha: 0.1);
   static const Color _purpleText = Color(0xFF7E4CCB);
   static const Color _purpleBg = Color(0xFFF0E7FA);
   static const Color _travelerText = Color(0xFFA6927C);
   static const Color _travelerBg = Color(0xFFF4EDE3);
-  static const Color _greyText = Color(0xFF6B7280);
+  static final Color _greyText = AppThemeColors.greyText;
   // static const Color _borderColor = Color(0xFFE5E7EB);
-  static const Color _borderColor = Color(0xFFEF6C33); // show border lines
-  static const Color kBgColor = Color(0xFFFFF5ED);
+  static final Color _borderColor = AppThemeColors.borderLight; // show border lines
+  static final Color kBgColor = AppThemeColors.bgCream;
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +76,18 @@ class GroupMembersScreen extends StatelessWidget {
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppThemeColors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: _borderColor.withValues(alpha: 0.5)),
+              border: Border.all(color: AppThemeColors.borderLight),
             ),
-            child: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black),
+            child: const Icon(Icons.arrow_back_ios_new, size: 18, color: AppThemeColors.blackText),
           ),
         ),
       ),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Group Members", style: AppTextStyle.bold.copyWith(fontSize: 18, color: Colors.black)),
+          Text("Group Members", style: AppTextStyle.bold.copyWith(fontSize: 18, color: AppThemeColors.blackText)),
           Obx(() {
             final totalMembers = controller.filteredAgents.length + controller.filteredVendors.length + controller.filteredCustomers.length;
             return Text("$totalMembers people on this journey", style: AppTextStyle.medium.copyWith(fontSize: 12, color: _greyText));
@@ -113,10 +114,12 @@ class GroupMembersScreen extends StatelessWidget {
   Widget _buildSearchBar(GroupMembersCtrl controller) {
     return Container(
       margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _borderColor),
+      decoration: AppThemeStyles.cardDecoration(
+        color: AppThemeColors.white,
+        radius: AppThemeStyles.radiusMedium,
+        shadows: AppThemeStyles.shadowLight,
+      ).copyWith(
+        border: Border.all(color: AppThemeColors.borderLight),
       ),
       child: TextField(
         controller: controller.searchController,
@@ -124,8 +127,8 @@ class GroupMembersScreen extends StatelessWidget {
         style: AppTextStyle.medium.copyWith(fontSize: 15),
         decoration: InputDecoration(
           hintText: "Search members...",
-          hintStyle: AppTextStyle.regular.copyWith(color: Colors.grey.shade400, fontSize: 15),
-          prefixIcon: Icon(Icons.search, color: Colors.grey.shade400, size: 22),
+          hintStyle: AppTextStyle.regular.copyWith(color: AppThemeColors.greyText, fontSize: 15),
+          prefixIcon: const Icon(Icons.search, color: AppThemeColors.greyText, size: 22),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 15),
         ),
@@ -168,10 +171,12 @@ class GroupMembersScreen extends StatelessWidget {
         _buildSectionHeader("Agents", controller.filteredAgents.length),
         const SizedBox(height: 12),
         Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: _borderColor.withValues(alpha: 0.5)),
+          decoration: AppThemeStyles.cardDecoration(
+            color: AppThemeColors.white,
+            radius: AppThemeStyles.radiusXLarge,
+            shadows: AppThemeStyles.shadowLight,
+          ).copyWith(
+            border: Border.all(color: AppThemeColors.borderLight),
           ),
           child: Column(
             children: List.generate(controller.filteredAgents.length, (index) {
@@ -198,10 +203,12 @@ class GroupMembersScreen extends StatelessWidget {
         _buildSectionHeader("Vendors", controller.filteredVendors.length),
         const SizedBox(height: 12),
         Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: _borderColor.withValues(alpha: 0.5)),
+          decoration: AppThemeStyles.cardDecoration(
+            color: AppThemeColors.white,
+            radius: AppThemeStyles.radiusXLarge,
+            shadows: AppThemeStyles.shadowLight,
+          ).copyWith(
+            border: Border.all(color: AppThemeColors.borderLight),
           ),
           child: Column(
             children: List.generate(controller.filteredVendors.length, (index) {
@@ -228,10 +235,12 @@ class GroupMembersScreen extends StatelessWidget {
         _buildSectionHeader("Travelers", controller.filteredCustomers.length),
         const SizedBox(height: 12),
         Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: _borderColor.withValues(alpha: 0.5)),
+          decoration: AppThemeStyles.cardDecoration(
+            color: AppThemeColors.white,
+            radius: AppThemeStyles.radiusXLarge,
+            shadows: AppThemeStyles.shadowLight,
+          ).copyWith(
+            border: Border.all(color: AppThemeColors.borderLight),
           ),
           child: Column(
             children: List.generate(controller.filteredCustomers.length, (index) {
@@ -252,7 +261,7 @@ class GroupMembersScreen extends StatelessWidget {
   Widget _buildSectionHeader(String title, int count) {
     return Row(
       children: [
-        Text(title, style: AppTextStyle.bold.copyWith(fontSize: 20, color: Colors.black)),
+        Text(title, style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.blackText)),
         const SizedBox(width: 12),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -277,7 +286,7 @@ class GroupMembersScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(agent.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.black)),
+                Text(agent.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                 Text(agent.email ?? "", maxLines: 1, style: AppTextStyle.medium.copyWith(fontSize: 13, color: _greyText)),
               ],
             ),
@@ -303,7 +312,7 @@ class GroupMembersScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(vendor.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.black)),
+                Text(vendor.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                 Text(subtitle, maxLines: 1, style: AppTextStyle.medium.copyWith(fontSize: 13, color: _greyText)),
                 if (vendor.contactPerson?.isNotEmpty == true)
                   Text(vendor.contactPerson!, style: AppTextStyle.medium.copyWith(fontSize: 12, color: _greyText.withValues(alpha: 0.8))),
@@ -329,7 +338,7 @@ class GroupMembersScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(member.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: Colors.black)),
+                Text(member.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                 Text(member.email ?? "", style: AppTextStyle.medium.copyWith(fontSize: 13, color: _greyText)),
               ],
             ),
