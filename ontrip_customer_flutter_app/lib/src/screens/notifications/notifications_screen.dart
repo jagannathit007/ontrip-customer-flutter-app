@@ -16,9 +16,21 @@ class NotificationsScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: AppThemeColors.primaryOrange,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded, color: AppThemeColors.white),
           onPressed: () => Get.back(),
+          icon: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(12)),
+            child: const Icon(Icons.arrow_back_ios_new, size: 20, color: AppThemeColors.white),
+          ),
         ),
+        //      IconButton(
+        //       onPressed: () => Get.back(),
+        //  constraints:     Container(
+        //           padding: const EdgeInsets.all(8),
+        //           decoration: BoxDecoration(color: AppThemeColors.bgCream, borderRadius: BorderRadius.circular(12)),
+        //           child: const Icon(Icons.arrow_back_ios_new, size: 16, color: AppThemeColors.blackText),
+        //         ),
+        //     ),
         title: Text('Notifications', style: AppTextStyle.bold.copyWith(fontSize: 20, color: AppThemeColors.white)),
         actions: [
           Obx(() {
@@ -30,32 +42,35 @@ class NotificationsScreen extends StatelessWidget {
           }),
         ],
       ),
-      body: Obx(() {
-        if (ctrl.isLoading.value && ctrl.notifications.isEmpty) {
-          return const Center(child: CustomLoadingIndicator());
-        }
+      body: SafeArea(
+        bottom: true,
+        child: Obx(() {
+          if (ctrl.isLoading.value && ctrl.notifications.isEmpty) {
+            return const Center(child: CustomLoadingIndicator());
+          }
 
-        if (ctrl.notifications.isEmpty) {
-          return _buildEmptyState();
-        }
+          if (ctrl.notifications.isEmpty) {
+            return _buildEmptyState();
+          }
 
-        return RefreshIndicator(
-          onRefresh: () async {
-            await ctrl.fetchNotifications();
-            await ctrl.fetchUnreadCount();
-          },
-          color: AppThemeColors.primaryOrange,
-          backgroundColor: AppThemeColors.white,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            itemCount: ctrl.notifications.length,
-            itemBuilder: (context, index) {
-              final notification = ctrl.notifications[index];
-              return _buildNotificationCard(notification, ctrl);
+          return RefreshIndicator(
+            onRefresh: () async {
+              await ctrl.fetchNotifications();
+              await ctrl.fetchUnreadCount();
             },
-          ),
-        );
-      }),
+            color: AppThemeColors.primaryOrange,
+            backgroundColor: AppThemeColors.white,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              itemCount: ctrl.notifications.length,
+              itemBuilder: (context, index) {
+                final notification = ctrl.notifications[index];
+                return _buildNotificationCard(notification, ctrl);
+              },
+            ),
+          );
+        }),
+      ),
     );
   }
 
@@ -65,13 +80,14 @@ class NotificationsScreen extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       decoration: AppThemeStyles.cardDecoration(
         color: isUnread ? AppThemeColors.primaryOrange.withValues(alpha: 0.05) : AppThemeColors.white,
         radius: AppThemeStyles.radiusMedium,
-        shadows: AppThemeStyles.shadowLight,
+        shadows: AppThemeStyles.shadowMedium,
       ),
       child: Material(
-        color: Colors.transparent,
+        color: Colors.white,
         child: InkWell(
           onTap: () => ctrl.onNotificationTap(notification),
           borderRadius: BorderRadius.circular(16),
@@ -97,11 +113,19 @@ class NotificationsScreen extends StatelessWidget {
                           Expanded(
                             child: Text(notification.title ?? 'Notification', style: AppTextStyle.bold.copyWith(fontSize: 15, color: const Color(0xFF1E293B))),
                           ),
+                          if (!isUnread)
+                            Container(
+                              // width: 8,
+                              // height: 8,
+                              // decoration: BoxDecoration(color: AppThemeColors.primaryOrange, shape: BoxShape.circle),
+                              child: Icon(size: 20, color: AppThemeColors.primaryOrange, Icons.done_all_rounded),
+                            ),
                           if (isUnread)
                             Container(
                               width: 8,
                               height: 8,
                               decoration: BoxDecoration(color: AppThemeColors.primaryOrange, shape: BoxShape.circle),
+                              // child: Icon(size: 20, color: AppThemeColors.primaryOrange, Icons.done_rounded),
                             ),
                         ],
                       ),

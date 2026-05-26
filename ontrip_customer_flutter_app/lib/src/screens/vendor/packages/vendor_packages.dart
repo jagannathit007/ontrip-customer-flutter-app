@@ -54,35 +54,30 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
             // ── Header ──────────────────────────────────────────
             Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
-                ),
+                // gradient: LinearGradient(
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                //   colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
+                // ),
+                color: AppThemeColors.white,
                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
+                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: SafeArea(
-                bottom: false,
+                top: true,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          color: AppThemeColors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 8))],
-                        ),
-                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(color: AppThemeColors.white, shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(2),
+
                         child: Container(
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)]),
-                            shape: BoxShape.circle,
-                          ),
+                          decoration: BoxDecoration(color: AppThemeColors.primaryOrange, shape: BoxShape.circle),
                           child: Center(
                             child: Text(
                               (authCtrl.userAuthData['name']?.toString().isNotEmpty ?? false) ? authCtrl.userAuthData['name'][0].toUpperCase() : 'V',
@@ -96,18 +91,18 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(_greeting, style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.white.withValues(alpha: 0.8))),
+                            Text(_greeting, style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.blackText.withValues(alpha: 0.8))),
                             const SizedBox(height: 4),
                             Obx(
                               () => Text(
                                 authCtrl.userAuthData['name'] ?? 'Vendor',
-                                style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.white, letterSpacing: -0.5),
+                                style: AppTextStyle.bold.copyWith(fontSize: 24, color: AppThemeColors.blackText, letterSpacing: -0.5),
                               ),
                             ),
                             const SizedBox(height: 4),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(8)),
+                              decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.8), borderRadius: BorderRadius.circular(4)),
                               child: Obx(
                                 () => Text(
                                   (authCtrl.userAuthData['type'] ?? 'vendor').toString().toUpperCase(),
@@ -129,13 +124,11 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                           return GestureDetector(
                             onTap: () => Get.toNamed(RouteNames.notifications),
                             child: Container(
-                              // margin: const EdgeInsets.only(right: 16),
                               padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
-                                  const Icon(Icons.notifications_outlined, color: AppThemeColors.white, size: 28),
+                                  const Icon(Icons.notifications_rounded, color: AppThemeColors.primaryOrange, size: 30),
                                   Obx(() {
                                     if (notificationCtrl.unreadCount.value > 0) {
                                       return Positioned(
@@ -144,7 +137,7 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                                         child: Container(
                                           padding: const EdgeInsets.all(2),
                                           decoration: BoxDecoration(
-                                            color: AppThemeColors.error,
+                                            color: AppThemeColors.white,
                                             shape: BoxShape.circle,
                                             border: Border.all(color: AppThemeColors.primaryOrange, width: 2),
                                           ),
@@ -152,7 +145,7 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                                           child: Center(
                                             child: Text(
                                               notificationCtrl.unreadCount.value > 9 ? '9+' : '${notificationCtrl.unreadCount.value}',
-                                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 12),
+                                              style: AppTextStyle.bold.copyWith(color: AppThemeColors.primaryOrange, fontSize: 12),
                                             ),
                                           ),
                                         ),
@@ -175,30 +168,6 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
             const SizedBox(height: 20),
 
             // ── Search ───────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppThemeColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppThemeColors.borderLight),
-                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
-                ),
-                child: TextField(
-                  controller: _searchCtrl,
-                  style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText),
-                  decoration: InputDecoration(
-                    hintText: 'Search by title or destination...',
-                    hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText, fontSize: 15),
-                    prefixIcon: Icon(Icons.search_rounded, color: AppThemeColors.primaryOrange.withValues(alpha: 0.7), size: 20),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 16),
 
             // ── List ─────────────────────────────────────────────
             Expanded(
@@ -220,11 +189,40 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                 return RefreshIndicator(
                   onRefresh: ctrl.fetchPackages,
                   color: AppThemeColors.primaryOrange,
-                  backgroundColor: AppThemeColors.white,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-                    itemCount: filtered.length,
-                    itemBuilder: (context, index) => _buildCard(filtered[index]),
+                  backgroundColor: AppThemeColors.bgCream,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          // color: AppThemeColors.bgCream,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppThemeColors.borderLight),
+                          // boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 8, offset: const Offset(0, 2))],
+                        ),
+                        child: TextField(
+                          controller: _searchCtrl,
+                          style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.blackText),
+                          decoration: InputDecoration(
+                            fillColor: AppThemeColors.white,
+                            hintText: 'Search by title or destination...',
+                            hintStyle: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText, fontSize: 15),
+                            prefixIcon: Icon(Icons.search_rounded, color: AppThemeColors.primaryOrange.withValues(alpha: 0.7), size: 20),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+                          itemCount: filtered.length,
+                          itemBuilder: (context, index) => _buildCard(filtered[index]),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }),

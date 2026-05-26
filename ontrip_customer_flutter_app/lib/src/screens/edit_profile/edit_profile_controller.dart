@@ -44,19 +44,11 @@ class EditProfileCtrl extends GetxController {
 
     try {
       isLoading.value = true;
-      final body = {
-        "name": nameController.text.trim(),
-        "email": emailController.text.trim(),
-      };
+      final body = {"name": nameController.text.trim(), "email": emailController.text.trim()};
 
-      final response = await ApiManager.call(
-        endPoint: BACKEND.profileUpdate,
-        type: ApiType.put,
-        body: body,
-      );
+      final response = await ApiManager.call(endPoint: BACKEND.profileUpdate, type: ApiType.put, body: body);
 
-      if ((response.status == 1 || response.status == 200) &&
-          response.success == true) {
+      if ((response.status == 1 || response.status == 200) && response.success == true) {
         // Update local data
         if (response.data != null && response.data['customer'] != null) {
           authService.userAuthData.assignAll(response.data['customer']);
@@ -69,7 +61,7 @@ class EditProfileCtrl extends GetxController {
         errorToast(response.message);
       }
     } catch (e) {
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     } finally {
       isLoading.value = false;
     }

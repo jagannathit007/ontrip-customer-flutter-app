@@ -66,13 +66,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   // Enhanced Header with gradient background
                   Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
-                      ),
+                      color: AppThemeColors.white,
+                      // gradient: LinearGradient(
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      //   colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
+                      // ),
                       borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-                      boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
+                      boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
                     ),
                     child: _buildAppBar(ctrl),
                   ),
@@ -141,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     return Container(
       width: double.infinity,
       height: 300,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       decoration: BoxDecoration(
         color: AppThemeColors.greyText.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(AppThemeStyles.radiusXXLarge),
@@ -1127,17 +1128,15 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              decoration: BoxDecoration(
-                color: AppThemeColors.white,
-                shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 15, offset: const Offset(0, 8))],
-              ),
-              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(color: AppThemeColors.white, shape: BoxShape.circle),
+              padding: const EdgeInsets.all(2),
               child: Container(
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)]),
+                  // borderRadius: BorderRadius.circular(50),
+                  // border: Border.all(color: AppThemeColors.primaryOrange),
+                  color: AppThemeColors.primaryOrange,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -1155,7 +1154,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     children: [
                       Text(
                         "${getGreetingText()}, ",
-                        style: AppTextStyle.bold.copyWith(color: AppThemeColors.white.withValues(alpha: 0.9), fontSize: 16, height: 1.2),
+                        style: AppTextStyle.bold.copyWith(color: AppThemeColors.blackText.withValues(alpha: 0.9), fontSize: 16, height: 1.2),
                       ),
                       Text(getGreetingEmoji(), style: const TextStyle(fontSize: 18)),
                     ],
@@ -1165,10 +1164,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   Text(
                     name,
                     style: AppTextStyle.bold.copyWith(
-                      color: AppThemeColors.white,
+                      color: AppThemeColors.blackText,
                       fontSize: 24,
                       height: 1.1,
-                      shadows: [Shadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10)],
+                      // shadows: [Shadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10)],
                     ),
                   ),
                 ],
@@ -1178,13 +1177,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             GestureDetector(
               onTap: () => Get.toNamed(RouteNames.notifications),
               child: Container(
-                // margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.all(4),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    const Icon(Icons.notifications_outlined, color: AppThemeColors.white, size: 28),
+                    const Icon(Icons.notifications_rounded, color: AppThemeColors.primaryOrange, size: 30),
                     Obx(() {
                       if (notificationCtrl.unreadCount.value > 0) {
                         return Positioned(
@@ -1193,7 +1190,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           child: Container(
                             padding: const EdgeInsets.all(2),
                             decoration: BoxDecoration(
-                              color: AppThemeColors.error,
+                              color: AppThemeColors.white,
                               shape: BoxShape.circle,
                               border: Border.all(color: AppThemeColors.primaryOrange, width: 2),
                             ),
@@ -1201,7 +1198,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             child: Center(
                               child: Text(
                                 notificationCtrl.unreadCount.value > 9 ? '9+' : '${notificationCtrl.unreadCount.value}',
-                                style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 12),
+                                style: AppTextStyle.bold.copyWith(color: AppThemeColors.primaryOrange, fontSize: 12),
                               ),
                             ),
                           ),

@@ -77,10 +77,7 @@ class GroupMembersCtrl extends GetxController {
 
   Future<void> toggleGlobal(bool val) async {
     allTravelersCanSend.value = val;
-    await _sendPatch(
-      travelersCanSendGlobally: val,
-      allowList: val ? [] : allowList.toList(),
-    );
+    await _sendPatch(travelersCanSendGlobally: val, allowList: val ? [] : allowList.toList());
   }
 
   Future<void> toggleTraveler(CustomerMember member) async {
@@ -91,38 +88,27 @@ class GroupMembersCtrl extends GetxController {
     } else {
       allowList.add(id);
     }
-    await _sendPatch(
-      travelersCanSendGlobally: false,
-      allowList: allowList.toList(),
-    );
+    await _sendPatch(travelersCanSendGlobally: false, allowList: allowList.toList());
     // Keep global off since we're managing individual permissions
     allTravelersCanSend.value = false;
   }
 
-  Future<void> _sendPatch({
-    required bool travelersCanSendGlobally,
-    required List<String> allowList,
-  }) async {
+  Future<void> _sendPatch({required bool travelersCanSendGlobally, required List<String> allowList}) async {
     final communityId = community.value?.id;
     if (communityId == null) return;
     try {
       isUpdating.value = true;
       final response = await ApiManager.call(
-        endPoint:
-            "${BACKEND.communityMessages}$communityId${BACKEND.communityMessaging}",
+        endPoint: "${BACKEND.communityMessages}$communityId${BACKEND.communityMessaging}",
         type: ApiType.patch,
-        body: {
-          "travelersCanSendGlobally": travelersCanSendGlobally,
-          "travelerSendDenyList": [],
-          "travelerSendAllowList": allowList,
-        },
+        body: {"travelersCanSendGlobally": travelersCanSendGlobally, "travelerSendDenyList": [], "travelerSendAllowList": allowList},
       );
       if (response.status != 1 && response.status != 200) {
         errorToast(response.message);
       }
     } catch (e) {
       debugPrint("Error updating traveler messaging: $e");
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     } finally {
       isUpdating.value = false;
     }

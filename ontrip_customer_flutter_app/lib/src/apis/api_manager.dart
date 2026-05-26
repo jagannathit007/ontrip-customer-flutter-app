@@ -201,10 +201,7 @@ class ApiManager {
       ..validateStatus = (int? status) {
         return status! > 0;
       }
-      ..headers = {
-        'Accept': 'application/json',
-        'content-type': 'application/json',
-      };
+      ..headers = {'Accept': 'application/json', 'content-type': 'application/json'};
   }
 
   static Future<bool> isNetworkConnection() async {
@@ -221,11 +218,7 @@ class ApiManager {
     }
   }
 
-  static Future<APIResponse> call({
-    required String endPoint,
-    dynamic body,
-    ApiType? type,
-  }) async {
+  static Future<APIResponse> call({required String endPoint, dynamic body, ApiType? type}) async {
     _initializeDio();
     bool isInternet = await isNetworkConnection();
     if (isInternet) {
@@ -238,17 +231,13 @@ class ApiManager {
 
         if (body is FormData) {
           dio.options.headers.remove("content-type");
-          if (kDebugMode)
-            print(
-              "ApiManager: Detected FormData, removed content-type header.",
-            );
+          if (kDebugMode) print("ApiManager: Detected FormData, removed content-type header.");
         } else {
           dio.options.headers["content-type"] = "application/json";
         }
 
         final safeBody = body ?? {};
-        final apiType =
-            type ?? ApiType.post; // Default to POST if no type specified
+        final apiType = type ?? ApiType.post; // Default to POST if no type specified
         if (kDebugMode) {
           print("Api Name :${AppNetworkConstants.apiBaseURL}$endPoint");
           print("AuthToken :${dio.options.headers["Authorization"]}");
@@ -269,12 +258,7 @@ class ApiManager {
             response = await dio.patch(endPoint, data: safeBody);
             break;
           case ApiType.get:
-            response = await dio.get(
-              endPoint,
-              queryParameters: safeBody is Map && safeBody.isNotEmpty
-                  ? Map<String, dynamic>.from(safeBody)
-                  : null,
-            );
+            response = await dio.get(endPoint, queryParameters: safeBody is Map && safeBody.isNotEmpty ? Map<String, dynamic>.from(safeBody) : null);
             break;
         }
         log("Response...${response!.data}");
@@ -285,10 +269,7 @@ class ApiManager {
             bool isGuest = await getStorage('isGuest') ?? false;
             if (!isGuest) {
               await clearStorage();
-              Get.offNamedUntil(
-                RouteNames.splash,
-                (Route<dynamic> route) => false,
-              );
+              Get.offNamedUntil(RouteNames.splash, (Route<dynamic> route) => false);
               Get.put(SplashCtrl(), permanent: true).onReady();
             }
             errorToast("Session expired. Please login again.");
@@ -296,12 +277,11 @@ class ApiManager {
             errorToast(err.message ?? "Server error");
           }
           return APIResponse(status: 0, message: err.message);
-        } else if (err.type == DioExceptionType.receiveTimeout ||
-            err.type == DioExceptionType.connectionTimeout) {
+        } else if (err.type == DioExceptionType.receiveTimeout || err.type == DioExceptionType.connectionTimeout) {
           errorToast("Server is busy...!");
           return APIResponse(status: 0, message: "Timeout");
         } else {
-          errorToast("Something went wrong!");
+          errorToast("Unable to process your request right now, Please try again later.!");
           return APIResponse(status: 0, message: "Internal error");
         }
       } catch (err) {
@@ -320,26 +300,18 @@ class ApiManager {
         final responseData = Map<String, dynamic>.from(response.data);
 
         // Ensure consistent status pattern: 1 for success, 0 for failure
-        if (responseData.containsKey('success') &&
-            responseData['success'] == true) {
+        if (responseData.containsKey('success') && responseData['success'] == true) {
           responseData['status'] = 1;
-        } else if (responseData.containsKey('status') &&
-            (responseData['status'] == 200 || responseData['status'] == 201)) {
+        } else if (responseData.containsKey('status') && (responseData['status'] == 200 || responseData['status'] == 201)) {
           responseData['status'] = 1;
         } else if (!responseData.containsKey('status')) {
-          responseData['status'] =
-              1; // Default to success if no status field and no error
+          responseData['status'] = 1; // Default to success if no status field and no error
         }
 
         return APIResponse.fromJson(responseData);
       } else {
         // Handle non-json responses (like HTML error pages) - treat as failure
-        return APIResponse.fromJson({
-          "message":
-              response.statusMessage ?? response.data?.toString() ?? message,
-          "data": null,
-          "status": 0,
-        });
+        return APIResponse.fromJson({"message": response.statusMessage ?? response.data?.toString() ?? message, "data": null, "status": 0});
       }
     }
   }
@@ -351,12 +323,7 @@ class ApiManager {
       if (userData != null && userData is Map) {
         userName = userData["name"] ?? "";
       }
-      var errorShow = {
-        "Api": err.response!.realUri,
-        "Status": err.response!.statusCode,
-        "UserName": userName,
-        "StatusMessage": err.response!.statusMessage,
-      };
+      var errorShow = {"Api": err.response!.realUri, "Status": err.response!.statusCode, "UserName": userName, "StatusMessage": err.response!.statusMessage};
       throw Exception(errorShow);
     }
   }

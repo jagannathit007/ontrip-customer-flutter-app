@@ -346,7 +346,7 @@ class CommunityChatCtrl extends GetxController {
       }
     } catch (e) {
       debugPrint("Error toggling notification preference: $e");
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     }
   }
 
@@ -387,7 +387,7 @@ class CommunityChatCtrl extends GetxController {
       }
     } catch (e) {
       debugPrint("Error sending message: $e");
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     } finally {
       isSending.value = false;
     }

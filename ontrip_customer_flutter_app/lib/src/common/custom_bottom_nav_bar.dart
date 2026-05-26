@@ -157,12 +157,12 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProv
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.white70, // Dark capsule background
           borderRadius: BorderRadius.circular(100),
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 20, offset: const Offset(0, 10))],
+          boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,8 +240,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProv
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          // margin: const EdgeInsets.symmetric(horizontal: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
           decoration: BoxDecoration(
             // Active item gets the green pill background
             color: isActive ? AppThemeColors.primaryOrange : Colors.transparent,
@@ -249,34 +249,62 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> with TickerProv
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(
                 isActive ? item.activeIconAsset! : item.iconAsset!,
-                width: 20,
-                height: 20,
-                // Icon is black on green background, white on black background
+                width: 18,
+                height: 18,
                 colorFilter: ColorFilter.mode(isActive ? Colors.white : Colors.black, BlendMode.srcIn),
               ),
 
-              if (isActive)
-                Expanded(
-                  child: AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        item.label,
-                        maxLines: 1,
-                        // overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                    ),
+              if (isActive) ...[
+                const SizedBox(width: 4),
+
+                Flexible(
+                  child: Text(
+                    item.label,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                 ),
+              ],
             ],
           ),
+          // child: Row(
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: [
+          //     Flexible(
+          //       child: SvgPicture.asset(
+          //         isActive ? item.activeIconAsset! : item.iconAsset!,
+          //         width: 18,
+          //         height: 18,
+          //         // Icon is black on green background, white on black background
+          //         colorFilter: ColorFilter.mode(isActive ? Colors.white : Colors.black, BlendMode.srcIn),
+          //       ),
+          //     ),
+
+          //     if (isActive) ...[
+          //       const SizedBox(width: 4),
+          //       Flexible(
+          //         child: AnimatedSize(
+          //           duration: const Duration(milliseconds: 300),
+          //           curve: Curves.easeInOut,
+          //           child: Text(
+          //             textAlign: TextAlign.center,
+          //             item.label,
+          //             softWrap: true,
+          //             // maxLines: 1,
+          //             // overflow: TextOverflow.ellipsis,
+          //             style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ],
+          // ),
         ),
       ),
     );

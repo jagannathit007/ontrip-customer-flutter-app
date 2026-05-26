@@ -63,13 +63,9 @@ class CommunityCtrl extends GetxController {
       final isVendor = getStorage(AppSession.userRole) == 'vendor';
 
       if (isVendor) {
-        final response = await ApiManager.call(
-          endPoint: BACKEND.vendorPackages,
-          type: ApiType.get,
-        );
+        final response = await ApiManager.call(endPoint: BACKEND.vendorPackages, type: ApiType.get);
 
-        if ((response.status == 1 || response.status == 200) &&
-            response.success == true) {
+        if ((response.status == 1 || response.status == 200) && response.success == true) {
           final rawData = response.data;
           Map<String, dynamic>? dataMap;
           if (rawData is Map<String, dynamic>) {
@@ -85,9 +81,7 @@ class CommunityCtrl extends GetxController {
           final groups = <VendorPackageGroup>[];
 
           for (final p in packageList) {
-            final pMap = p is Map<String, dynamic>
-                ? p
-                : Map<String, dynamic>.from(p as Map);
+            final pMap = p is Map<String, dynamic> ? p : Map<String, dynamic>.from(p as Map);
 
             final packageId = pMap['_id'] as String? ?? '';
             final title = pMap['title'] as String? ?? '';
@@ -112,9 +106,7 @@ class CommunityCtrl extends GetxController {
             final parsedBookings = <Booking>[];
             for (final b in rawBookings) {
               if (b is! Map) continue;
-              final bMap = b is Map<String, dynamic>
-                  ? b
-                  : Map<String, dynamic>.from(b);
+              final bMap = b is Map<String, dynamic> ? b : Map<String, dynamic>.from(b);
               try {
                 parsedBookings.add(Booking.fromJson(bMap));
               } catch (e) {
@@ -124,28 +116,25 @@ class CommunityCtrl extends GetxController {
 
             // Only include packages that have bookings
             if (parsedBookings.isNotEmpty) {
-              groups.add(VendorPackageGroup(
-                packageId: packageId,
-                title: title,
-                destination: destination,
-                coverImage: coverImg,
-                totalDays: totalDays,
-                firstActivityName: firstActivity,
-                bookings: parsedBookings,
-              ));
+              groups.add(
+                VendorPackageGroup(
+                  packageId: packageId,
+                  title: title,
+                  destination: destination,
+                  coverImage: coverImg,
+                  totalDays: totalDays,
+                  firstActivityName: firstActivity,
+                  bookings: parsedBookings,
+                ),
+              );
             }
           }
 
           vendorGroups.assignAll(groups);
         }
       } else {
-        final response = await ApiManager.call(
-          endPoint: BACKEND.bookings,
-          type: ApiType.get,
-        );
-        if ((response.status == 1 || response.status == 200) &&
-            response.success == true &&
-            response.data != null) {
+        final response = await ApiManager.call(endPoint: BACKEND.bookings, type: ApiType.get);
+        if ((response.status == 1 || response.status == 200) && response.success == true && response.data != null) {
           final bookingData = BookingResponseData.fromJson(response.data);
           bookings.assignAll(bookingData.bookings ?? []);
         }
@@ -157,8 +146,7 @@ class CommunityCtrl extends GetxController {
     }
   }
 
-  void navigateToChat(String? packageId, String? coverImageUrl,
-      {Booking? booking}) {
+  void navigateToChat(String? packageId, String? coverImageUrl, {Booking? booking}) {
     final isVendor = getStorage(AppSession.userRole) == 'vendor';
 
     if (isVendor) {
@@ -168,28 +156,16 @@ class CommunityCtrl extends GetxController {
       final customerId = (booking?.customer?.id?.isNotEmpty == true)
           ? booking!.customer!.id!
           : (booking?.agencyCustomer?.id?.isNotEmpty == true)
-              ? booking!.agencyCustomer!.id!
-              : (Get.find<AuthenticationController>()
-                      .userAuthData['_id']
-                      ?.toString() ??
-                  '');
+          ? booking!.agencyCustomer!.id!
+          : (Get.find<AuthenticationController>().userAuthData['_id']?.toString() ?? '');
 
       Get.toNamed(
         RouteNames.communityChat,
-        arguments: {
-          "isVendor": true,
-          "packageId": packageId,
-          "bookingId": bookingMongoId,
-          "customerId": customerId,
-          "coverImage": coverImageUrl,
-        },
+        arguments: {"isVendor": true, "packageId": packageId, "bookingId": bookingMongoId, "customerId": customerId, "coverImage": coverImageUrl},
       );
     } else {
       if (packageId == null || packageId.isEmpty) return;
-      Get.toNamed(
-        RouteNames.communityChat,
-        arguments: {"packageId": packageId, "coverImage": coverImageUrl},
-      );
+      Get.toNamed(RouteNames.communityChat, arguments: {"packageId": packageId, "coverImage": coverImageUrl});
     }
   }
 
@@ -397,7 +373,7 @@ class CommunityCtrl extends GetxController {
       }
     } catch (e) {
       debugPrint("Error toggling notification preference: $e");
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     }
   }
 
@@ -423,7 +399,7 @@ class CommunityCtrl extends GetxController {
       }
     } catch (e) {
       debugPrint("Error sending message: $e");
-      errorToast("Something went wrong");
+      errorToast("Unable to process your request right now, Please try again later.");
     } finally {
       isSending.value = false;
     }
