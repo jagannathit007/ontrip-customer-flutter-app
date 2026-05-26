@@ -424,15 +424,15 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
               style: AppTextStyle.medium.copyWith(fontSize: 16, color: AppThemeColors.greyText, height: 1.5),
             ),
             const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppThemeColors.primaryOrange,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
-              ),
-              child: Text("Explore Trips", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: AppThemeColors.white)),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            //   decoration: BoxDecoration(
+            //     color: AppThemeColors.primaryOrange,
+            //     borderRadius: BorderRadius.circular(16),
+            //     boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+            //   ),
+            //   child: Text("Explore Trips", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: AppThemeColors.white)),
+            // ),
           ],
         ),
       ),
