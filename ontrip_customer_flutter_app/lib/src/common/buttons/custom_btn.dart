@@ -1,3 +1,5 @@
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
+
 import '../../../app_export.dart';
 
 class CustomBtn extends StatelessWidget {
@@ -41,7 +43,7 @@ class CustomBtn extends StatelessWidget {
           padding: padding ?? const EdgeInsets.only(left: 15, right: 15, top: 12, bottom: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
-            side: BorderSide(color: borderColor ?? Constant.instance.primary, width: borderWidth),
+            side: BorderSide(color: borderColor ?? AppThemeColors.primaryOrange, width: borderWidth),
           ),
           backgroundColor: bgColor,
           disabledBackgroundColor: bgColor,
@@ -53,10 +55,7 @@ class CustomBtn extends StatelessWidget {
                 children: [
                   if (prefix != null) ...[prefix!, Constant.instance.square.copyWith(height: 0, width: prefixDistance)],
                   Flexible(
-                    child: Text(
-                      text ?? "Save",
-                      style: style ?? AppTextStyle.bold.copyWith(fontSize: 14.5, color: Constant.instance.white),
-                    ),
+                    child: Text(text ?? "Save", style: style ?? AppTextStyle.bold.copyWith(fontSize: 14.5, color: Constant.instance.white)),
                   ),
                   if (suffix != null) ...[Constant.instance.square.copyWith(height: 0, width: suffixDistance), suffix!],
                 ],

@@ -120,7 +120,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
         child: Container(
           height: 40,
           width: 40,
-          decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(12), boxShadow: AppThemeStyles.shadowLight),
+          decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(12), boxShadow: AppThemeStyles.shadowMedium),
           child: Icon(icon, color: iconColor, size: 20),
         ),
       ),
@@ -160,7 +160,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
             top: 20,
             right: 20,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -193,7 +193,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
               decoration: BoxDecoration(
                 color: AppThemeColors.white.withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: AppThemeStyles.shadowLight,
+                boxShadow: AppThemeStyles.shadowMedium,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -616,7 +616,7 @@ class BookingDetailsScreen extends GetView<BookingDetailsCtrl> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.map_rounded, color: AppThemeColors.primaryOrange, size: 20),
+                child: Icon(Icons.route, color: AppThemeColors.primaryOrange, size: 20),
               ),
               const SizedBox(width: 12),
               Text("TRIP ITINERARY", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.primaryOrange, letterSpacing: 0.5)),

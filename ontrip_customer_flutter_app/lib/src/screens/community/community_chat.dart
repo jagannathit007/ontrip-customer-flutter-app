@@ -50,10 +50,9 @@ class CommunityChatScreen extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(CommunityChatCtrl controller) {
     return AppBar(
-      titleSpacing: 0,
-      backgroundColor: AppThemeColors.white,
+      backgroundColor: AppThemeColors.primaryOrange,
       elevation: 0,
-      surfaceTintColor: AppThemeColors.white,
+      // surfaceTintColor: AppThemeColors.primaryOrange,
       shadowColor: AppThemeColors.shadowMedium,
       scrolledUnderElevation: 8,
       leadingWidth: 100,
@@ -62,29 +61,45 @@ class CommunityChatScreen extends StatelessWidget {
           IconButton(
             onPressed: () => Get.back(),
             icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(color: AppThemeColors.bgCream, borderRadius: BorderRadius.circular(12)),
-              child: const Icon(Icons.arrow_back_ios_new, size: 16, color: AppThemeColors.blackText),
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(12)),
+              child: const Icon(Icons.arrow_back_ios_new, size: 20, color: AppThemeColors.white),
             ),
           ),
-          Container(
-            height: 44,
-            width: 44,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
-              borderRadius: BorderRadius.circular(14),
-              boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
-            ),
-            child: Obx(() {
-              final img = controller.coverImage.value;
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: img != null && img.isNotEmpty
-                    ? CustomNetworkImage(imageUrl: "${AppNetworkConstants.baseURL}$img", height: 44, width: 44, fit: BoxFit.cover)
-                    : const Icon(Icons.forum_rounded, color: Colors.white, size: 20),
-              );
-            }),
-          ),
+          // Container(
+          //   // height: 44,
+          //   // width: 44,
+          //   decoration: BoxDecoration(
+          //     // gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
+          //     borderRadius: BorderRadius.circular(14),
+          //     // boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 8, offset: const Offset(0, 2))],
+          //   ),
+          //   child: Obx(() {
+          //     final img = controller.coverImage.value;
+          //     return Container(
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(12),
+          //         border: Border.all(color: AppThemeColors.greyText.withValues(alpha: 0.5)),
+          //         // boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
+          //       ),
+          //       child: CustomNetworkImage(imageUrl: "${AppNetworkConstants.baseURL}$img", height: 45, width: 45, fit: BoxFit.cover),
+          //     );
+
+          //     // ClipRRect(
+          //     //   borderRadius: BorderRadius.circular(14),
+          //     //   child: img != null && img.isNotEmpty
+          //     //       ? CustomNetworkImage(imageUrl: "${AppNetworkConstants.baseURL}$img", height: 44, width: 44, fit: BoxFit.cover)
+          //     //       : const Icon(Icons.forum_rounded, color: Colors.white, size: 20),
+          //     // );
+          //   }),
+          // ),
+          Obx(() {
+            final img = controller.coverImage.value;
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CustomNetworkImage(height: 46, width: 45, imageUrl: "${AppNetworkConstants.baseURL}$img", fit: BoxFit.fill),
+            );
+          }),
         ],
       ),
       title: Obx(() {
@@ -99,19 +114,9 @@ class CommunityChatScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTextStyle.bold.copyWith(fontSize: 17, color: AppThemeColors.blackText, height: 1.2)),
+                  Text(title, style: AppTextStyle.bold.copyWith(fontSize: 18, color: AppThemeColors.blackText, height: 1.2)),
                   const SizedBox(height: 2),
-                  Row(
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(color: AppThemeColors.success, shape: BoxShape.circle),
-                      ),
-                      const SizedBox(width: 6),
-                      Text("$participants participants", style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.greyText)),
-                    ],
-                  ),
+                  Text("$participants participants", style: AppTextStyle.medium.copyWith(fontSize: 12, color: AppThemeColors.blackText)),
                 ],
               ),
             ),
@@ -132,10 +137,20 @@ class CommunityChatScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.only(right: 4),
               decoration: BoxDecoration(
-                color: controller.notificationEnabled.value ? AppThemeColors.primaryOrange.withValues(alpha: 0.15) : AppThemeColors.bgCream,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: controller.notificationEnabled.value ? AppThemeColors.borderOrange : AppThemeColors.borderLight),
+                border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+                boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))],
               ),
+              // decoration: BoxDecoration(
+              //   color: controller.notificationEnabled.value ? AppThemeColors.white.withValues(alpha: 0.3) : AppThemeColors.greyText,
+              //   borderRadius: BorderRadius.circular(12),
+              //   border: Border.all(color: AppThemeColors.white),
+              //   boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))],
+              // ),
+              // borderRadius: BorderRadius.circular(12),
+              // border: Border.all(color: controller.notificationEnabled.value ? AppThemeColors.borderOrange : AppThemeColors.borderLight),
+              // ),
               child: Icon(
                 controller.notificationEnabled.value ? Icons.notifications_active_rounded : Icons.notifications_off_rounded,
                 color: controller.notificationEnabled.value ? AppThemeColors.primaryOrange : AppThemeColors.greyText,
@@ -157,11 +172,12 @@ class CommunityChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             margin: const EdgeInsets.only(right: 4),
             decoration: BoxDecoration(
-              color: AppThemeColors.warning.withValues(alpha: 0.15),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppThemeColors.warning.withValues(alpha: 0.2)),
+              border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))],
             ),
-            child: const Icon(Icons.group_rounded, color: AppThemeColors.warning, size: 18),
+            child: const Icon(Icons.group_rounded, color: AppThemeColors.info, size: 18),
           ),
         ),
         GestureDetector(
@@ -177,9 +193,10 @@ class CommunityChatScreen extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             margin: const EdgeInsets.only(right: 16),
             decoration: BoxDecoration(
-              color: AppThemeColors.success.withValues(alpha: 0.15),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppThemeColors.success.withValues(alpha: 0.2)),
+              border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 8, offset: const Offset(0, 2))],
             ),
             child: const Icon(Icons.image_rounded, color: AppThemeColors.success, size: 18),
           ),
@@ -313,8 +330,7 @@ class CommunityChatScreen extends StatelessWidget {
                 title: const Text("Choose from Gallery"),
                 onTap: () async {
                   Get.back();
-                  // await controller.pickMedia();
-                  _showMediaPickerOptions(controller);
+                  await controller.pickMedia();
                 },
               ),
             ],
@@ -570,7 +586,7 @@ class CommunityChatScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     GestureDetector(
-                      onTap: controller.pickMedia,
+                      onTap: () => _showMediaPickerOptions(controller),
                       child: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -632,7 +648,7 @@ class CommunityChatScreen extends StatelessWidget {
                             colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
                           ),
                           shape: BoxShape.circle,
-                          boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))],
+                          // boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 4))],
                         ),
                         child: controller.isSending.value
                             ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))

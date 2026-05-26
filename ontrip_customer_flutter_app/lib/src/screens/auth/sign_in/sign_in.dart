@@ -1,4 +1,5 @@
 import 'package:ontrip_customer_flutter_app/src/screens/auth/sign_in/sign_in_ctrl.dart';
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import '../../../../app_export.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -100,30 +101,75 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget _buildRoleChip(SignInCtrl ctrl, UserRole role, String label) {
+  Widget _buildRoleSelector(SignInCtrl ctrl) {
     return Obx(() {
-      final isSelected = ctrl.selectedRole.value == role;
+      final isCustomer = ctrl.selectedRole.value == UserRole.customer;
 
-      return Expanded(
-        child: GestureDetector(
-          onTap: () => ctrl.selectRole(role),
-          child: Column(
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                // margin: const EdgeInsets.all(2),
-                // decoration: BoxDecoration(borderRadius: BorderRadius.circular(0), color: isSelected ? kPrimaryOrange : kWhite),
-                child: Text(label, style: AppTextStyle.bold.copyWith(fontSize: 13, color: isSelected ? kPrimaryOrange : kGreyText)),
+      return Container(
+        height: 52,
+        padding: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          color: AppThemeColors.bgCream,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppThemeColors.borderLight),
+        ),
+        child: Stack(
+          children: [
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              alignment: isCustomer ? Alignment.centerLeft : Alignment.centerRight,
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
               ),
-              Container(
-                // width: 1,
-                height: 5,
-                color: isSelected ? kPrimaryOrange : kWhite,
-              ),
-            ],
-          ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => ctrl.selectRole(UserRole.customer),
+                    behavior: HitTestBehavior.opaque,
+                    child: Center(
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        style: AppTextStyle.semiBold.copyWith(
+                          fontSize: 14,
+                          color: isCustomer ? Colors.white : AppThemeColors.greyText,
+                        ),
+                        child: const Text("Customer"),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => ctrl.selectRole(UserRole.vendor),
+                    behavior: HitTestBehavior.opaque,
+                    child: Center(
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        style: AppTextStyle.semiBold.copyWith(
+                          fontSize: 14,
+                          color: !isCustomer ? Colors.white : AppThemeColors.greyText,
+                        ),
+                        child: const Text("Vendor"),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       );
     });
@@ -143,23 +189,7 @@ class _SignInScreenState extends State<SignInScreen> {
           // ── Role selector ──────────────────────────────────────
           Text("SIGN IN AS", style: AppTextStyle.bold.copyWith(fontSize: 11, color: kGreyText, letterSpacing: 1)),
           const SizedBox(height: 10),
-          Container(
-            clipBehavior: Clip.hardEdge,
-
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: kWhite,
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 10, offset: const Offset(2, 4))],
-              // border: Border.all(color: kGreyText.withValues(alpha: 0.4), width: 1.5),
-            ),
-            child: Row(
-              children: [
-                _buildRoleChip(ctrl, UserRole.customer, "Customer"),
-                Container(width: 1, height: 45, color: kGreyText.withValues(alpha: 0.2)),
-                _buildRoleChip(ctrl, UserRole.vendor, "Vendor"),
-              ],
-            ),
-          ),
+          _buildRoleSelector(ctrl),
           const SizedBox(height: 20),
           // ── Phone number ───────────────────────────────────────
           Text("PHONE NUMBER", style: AppTextStyle.bold.copyWith(fontSize: 11, color: kGreyText, letterSpacing: 1)),

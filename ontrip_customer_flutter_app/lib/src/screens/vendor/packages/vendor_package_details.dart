@@ -1,4 +1,3 @@
-import 'package:readmore/readmore.dart' show ReadMoreText;
 import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 
 import '../../../../app_export.dart';
@@ -32,14 +31,33 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
           length: 2,
           child: Column(
             children: [
-              TabBar(
-                labelColor: AppThemeColors.primaryOrange,
-                unselectedLabelColor: AppThemeColors.greyText,
-                indicatorColor: AppThemeColors.primaryOrange,
-                tabs: const [
-                  Tab(text: 'Details'),
-                  Tab(text: 'Customers'),
-                ],
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppThemeColors.bgCream,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppThemeColors.borderLight),
+                ),
+                child: TabBar(
+                  labelColor: Colors.white,
+                  unselectedLabelColor: AppThemeColors.greyText,
+                  indicator: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent,
+                  labelStyle: AppTextStyle.semiBold.copyWith(fontSize: 14),
+                  unselectedLabelStyle: AppTextStyle.medium.copyWith(fontSize: 14),
+                  tabs: const [
+                    Tab(text: 'Details'),
+                    Tab(text: 'Customers'),
+                  ],
+                ),
               ),
               Expanded(
                 child: TabBarView(
@@ -115,7 +133,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             top: 20,
             right: 20,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -196,7 +214,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       decoration: BoxDecoration(
         color: AppThemeColors.white,
         borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
-        boxShadow: AppThemeStyles.shadowLight,
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +266,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       decoration: BoxDecoration(
         color: AppThemeColors.white,
         borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
-        boxShadow: AppThemeStyles.shadowLight,
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,7 +319,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
       decoration: BoxDecoration(
         color: AppThemeColors.white,
         borderRadius: BorderRadius.circular(AppThemeStyles.radiusLarge),
-        boxShadow: AppThemeStyles.shadowLight,
+        boxShadow: AppThemeStyles.shadowMedium,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,7 +445,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10)),
-                child: Icon(Icons.map_rounded, color: AppThemeColors.primaryOrange, size: 20),
+                child: Icon(Icons.route, color: AppThemeColors.primaryOrange, size: 20),
               ),
               const SizedBox(width: 12),
               Text("TRIP ITINERARY", style: AppTextStyle.bold.copyWith(fontSize: 14, color: AppThemeColors.primaryOrange, letterSpacing: 0.5)),
@@ -464,7 +482,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: isSelected ? AppThemeColors.primaryOrange.withValues(alpha: 0.3) : AppThemeColors.shadowLight,
+                          color: isSelected ? AppThemeColors.primaryOrange.withValues(alpha: 0.3) : AppThemeColors.shadowDark,
                           blurRadius: isSelected ? 8 : 5,
                           offset: const Offset(0, 2),
                         ),
@@ -506,7 +524,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                 Container(
                   width: Get.width,
                   padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(24), boxShadow: AppThemeStyles.shadowLight),
+                  decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(24), boxShadow: AppThemeStyles.shadowMedium),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -543,7 +561,7 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
             ),
           );
         }),
-        const SizedBox(height: 32), // Section spacing
+        const SizedBox(height: 16), // Section spacing
       ],
     );
   }
@@ -650,10 +668,14 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
         final customer = booking.customer;
         return Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(12), boxShadow: AppThemeStyles.shadowLight),
+          decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(12), boxShadow: AppThemeStyles.shadowMedium),
           child: Row(
             children: [
-              CircleAvatar(radius: 24, child: Text(customer?.name?.isNotEmpty == true ? customer!.name![0] : "?")),
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: AppThemeColors.greyText.withValues(alpha: 0.3),
+                child: Text(style: TextStyle(color: AppThemeColors.blackText, fontSize: 18), customer?.name?.isNotEmpty == true ? customer!.name![0] : "?"),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -661,11 +683,33 @@ class VendorPackageDetailsScreen extends GetView<VendorPackageDetailsCtrl> {
                   children: [
                     Text(customer?.name ?? "Unknown", style: AppTextStyle.bold.copyWith(fontSize: 16, color: AppThemeColors.blackText)),
                     const SizedBox(height: 4),
-                    Text(customer?.phone ?? "", style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText)),
+                    GestureDetector(
+                      onTap: () {
+                        final phone = customer?.phone;
+                        if (phone != null && phone.isNotEmpty) {
+                          AppUrl.call("tel:$phone", mobile: phone);
+                        }
+                      },
+                      behavior: HitTestBehavior.opaque,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.call_rounded, color: Colors.green, size: 16),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              customer?.phone ?? "",
+                              style: AppTextStyle.medium.copyWith(fontSize: 14, color: AppThemeColors.greyText),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Text(booking.bookingStatus ?? "", style: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText)),
+              // Text(booking.bookingStatus ?? "", style: AppTextStyle.medium.copyWith(color: AppThemeColors.greyText)),
             ],
           ),
         );

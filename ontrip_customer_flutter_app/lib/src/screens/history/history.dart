@@ -87,13 +87,14 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   Widget _buildHeader(HistoryCtrl controller) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
-        ),
+        color: AppThemeColors.white,
+        // gradient: LinearGradient(
+        //   begin: Alignment.topLeft,
+        //   end: Alignment.bottomRight,
+        //   colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.8)],
+        // ),
         borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-        boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
+        boxShadow: [BoxShadow(color: AppThemeColors.blackText.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 50, 24, 20),
@@ -103,20 +104,20 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
-                  child: const Icon(Icons.history_rounded, color: Colors.white, size: 28),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(color: AppThemeColors.primaryOrange, borderRadius: BorderRadius.circular(50)),
+                  child: const Icon(Icons.travel_explore_rounded, color: AppThemeColors.white, size: 28),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Your Journeys", style: AppTextStyle.bold.copyWith(fontSize: 25, color: AppThemeColors.white, letterSpacing: -0.8, height: 1.1)),
+                      Text("Your Journeys", style: AppTextStyle.bold.copyWith(fontSize: 25, color: AppThemeColors.blackText, letterSpacing: -0.8, height: 1.1)),
                       const SizedBox(height: 4),
                       Text(
                         "Relive your memories and plan for the next one",
-                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.white.withValues(alpha: 0.9), height: 1.3),
+                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.blackText.withValues(alpha: 0.9), height: 1.3),
                       ),
                     ],
                   ),

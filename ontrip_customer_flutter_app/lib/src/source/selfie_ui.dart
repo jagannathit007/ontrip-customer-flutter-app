@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ontrip_customer_flutter_app/src/core/app_theme_colors.dart';
 import 'package:ontrip_customer_flutter_app/src/core/constants.dart';
 
 class SelfieUI extends StatefulWidget {
@@ -100,7 +101,7 @@ class _SelfieUIState extends State<SelfieUI> with TickerProviderStateMixin {
 
           // ── Dashed face frame overlay ──
           Positioned.fill(
-            child: CustomPaint(painter: DashedFramePainter(color: Constant.instance.primary)),
+            child: CustomPaint(painter: DashedFramePainter(color: AppThemeColors.primaryOrange)),
           ),
 
           // ── Top bar ──
@@ -192,7 +193,7 @@ class _SelfieUIState extends State<SelfieUI> with TickerProviderStateMixin {
           child: ElevatedButton(
             onPressed: _isCapturing ? null : _takePicture,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Constant.instance.primary,
+              backgroundColor: AppThemeColors.primaryOrange,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               elevation: 6,

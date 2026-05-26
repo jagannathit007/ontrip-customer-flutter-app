@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
                     _buildMenuItem(icon: Icons.support_agent_rounded, title: "Contact Support", onTap: controller.contactsupport),
                   ]),
                   const SizedBox(height: 32),
-                  _buildSectionHeader("DANGER ZONE"),
+                  _buildSectionHeader("ACCOUNT POTIONS"),
                   const SizedBox(height: 12),
                   _buildMenuCard([
                     _buildMenuItem(
@@ -82,6 +82,84 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  // Widget _buildSliverAppBar(SettingsCtrl controller) {
+  //   return Obx(() {
+  //     final userData = controller.authService.userAuthData;
+  //     final name = userData['name'] ?? "User Name";
+  //     final email = userData['email'] ?? "user@example.com";
+
+  //     return SliverAppBar(
+  //       expandedHeight: 200,
+  //       pinned: true,
+  //       stretch: true,
+  //       backgroundColor: AppThemeColors.white.withValues(alpha: 0.1),
+  //       elevation: 0,
+  //       flexibleSpace: FlexibleSpaceBar(
+  //         // stretchModes: const [StretchMode.zoomBackground, StretchMode.blurBackground],
+  //         background: Stack(
+  //           fit: StackFit.expand,
+  //           children: [
+  //             Container(
+  //               decoration: BoxDecoration(
+  //                 gradient: LinearGradient(
+  //                   begin: Alignment.topCenter,
+  //                   end: Alignment.bottomCenter,
+  //                   colors: [
+  //                     AppThemeColors.primaryOrange,
+  //                     AppThemeColors.primaryOrange.withValues(alpha: 0.5),
+  //                     AppThemeColors.primaryOrange.withValues(alpha: 0.3),
+  //                     AppThemeColors.white.withValues(alpha: 0.1),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             Opacity(opacity: 0.15, child: Image.asset(Graphics.instance.profileBackground, fit: BoxFit.cover)),
+  //             Padding(
+  //               padding: const EdgeInsets.only(top: 40, left: 24, right: 24),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 crossAxisAlignment: CrossAxisAlignment.center,
+  //                 children: [
+  //                   Text(
+  //                     name,
+  //                     textAlign: TextAlign.center,
+  //                     style: AppTextStyle.bold.copyWith(color: AppThemeColors.blackText, fontSize: 32, letterSpacing: -1.0),
+  //                   ),
+  //                   const SizedBox(height: 12),
+  //                   Container(
+  //                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+  //                     decoration: BoxDecoration(
+  //                       color: AppThemeColors.white.withValues(alpha: 0.2),
+  //                       borderRadius: BorderRadius.circular(30),
+  //                       border: Border.all(color: AppThemeColors.primaryOrange),
+  //                     ),
+  //                     child: Row(
+  //                       mainAxisSize: MainAxisSize.min,
+  //                       children: [
+  //                         Icon(Icons.alternate_email_rounded, color: AppThemeColors.primaryOrange.withValues(alpha: 0.9), size: 14),
+  //                         const SizedBox(width: 8),
+  //                         Text(email, style: AppTextStyle.medium.copyWith(color: AppThemeColors.primaryOrange.withValues(alpha: 0.9), fontSize: 14)),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //       actions: [
+  //         Container(
+  //           margin: const EdgeInsets.only(right: 12),
+  //           child: IconButton(
+  //             icon: Icon(Icons.edit_note_rounded, color: AppThemeColors.white, size: 28),
+  //             onPressed: controller.navigateToEditProfile,
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   });
+  // }
   Widget _buildSliverAppBar(SettingsCtrl controller) {
     return Obx(() {
       final userData = controller.authService.userAuthData;
@@ -89,13 +167,14 @@ class SettingsScreen extends StatelessWidget {
       final email = userData['email'] ?? "user@example.com";
 
       return SliverAppBar(
-        expandedHeight: 200,
+        expandedHeight: 240,
         pinned: true,
         stretch: true,
-        backgroundColor: AppThemeColors.primaryOrange,
         elevation: 0,
+        backgroundColor: AppThemeColors.primaryOrange,
+        automaticallyImplyLeading: false,
+        actionsPadding: EdgeInsets.only(bottom: 5),
         flexibleSpace: FlexibleSpaceBar(
-          stretchModes: const [StretchMode.zoomBackground, StretchMode.blurBackground],
           background: Stack(
             fit: StackFit.expand,
             children: [
@@ -104,51 +183,89 @@ class SettingsScreen extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [AppThemeColors.primaryOrange, AppThemeColors.darkNavy, AppThemeColors.blackText],
+                    colors: [AppThemeColors.primaryOrange, AppThemeColors.primaryOrange.withValues(alpha: 0.85), const Color(0xFFFFD6B8)],
                   ),
                 ),
               ),
-              Opacity(opacity: 0.1, child: Image.asset(Graphics.instance.profileBackground, fit: BoxFit.cover)),
-              Padding(
-                padding: const EdgeInsets.only(top: 40, left: 24, right: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      name,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 32, letterSpacing: -1.0),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: AppThemeColors.white.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: AppThemeColors.white.withValues(alpha: 0.1)),
+
+              // Background Image
+              Opacity(opacity: 0.12, child: Image.asset(Graphics.instance.profileBackground, fit: BoxFit.cover)),
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      // Avatar
+                      Container(
+                        width: 70,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.2),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.7), width: 3),
+                        ),
+                        child: Center(
+                          child: Text(
+                            name.isNotEmpty ? name[0].toUpperCase() : "U",
+                            style: AppTextStyle.bold.copyWith(fontSize: 36, color: AppThemeColors.white),
+                          ),
+                        ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.alternate_email_rounded, color: AppThemeColors.white.withValues(alpha: 0.6), size: 14),
-                          const SizedBox(width: 8),
-                          Text(email, style: AppTextStyle.medium.copyWith(color: AppThemeColors.white.withValues(alpha: 0.9), fontSize: 14)),
-                        ],
+                      const SizedBox(height: 12),
+                      Text(
+                        name,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.bold.copyWith(color: AppThemeColors.white, fontSize: 28),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.20),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.55)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.alternate_email_rounded, color: AppThemeColors.white, size: 16),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                email,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyle.medium.copyWith(color: AppThemeColors.white, fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 12),
-            child: IconButton(
-              icon: Icon(Icons.edit_note_rounded, color: AppThemeColors.white, size: 28),
-              onPressed: controller.navigateToEditProfile,
+          Padding(
+            padding: const EdgeInsets.only(top: 8, right: 16),
+            child: Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppThemeColors.white.withValues(alpha: 0.3),
+                border: Border.all(color: AppThemeColors.white.withValues(alpha: 0.7)),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.edit_rounded, color: AppThemeColors.white, size: 20),
+                onPressed: controller.navigateToEditProfile,
+              ),
             ),
           ),
         ],
@@ -165,11 +282,7 @@ class SettingsScreen extends StatelessWidget {
 
   Widget _buildMenuCard(List<Widget> children) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppThemeColors.white,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: AppThemeStyles.shadowLight,
-      ),
+      decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(28), boxShadow: AppThemeStyles.shadowLight),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(28),
         child: Column(children: children),

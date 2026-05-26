@@ -118,9 +118,7 @@ class GroupMembersScreen extends StatelessWidget {
         color: AppThemeColors.white,
         radius: AppThemeStyles.radiusMedium,
         shadows: AppThemeStyles.shadowLight,
-      ).copyWith(
-        border: Border.all(color: AppThemeColors.borderLight),
-      ),
+      ).copyWith(border: Border.all(color: AppThemeColors.borderLight)),
       child: TextField(
         controller: controller.searchController,
         onChanged: (value) => controller.searchQuery.value = value,
@@ -140,21 +138,21 @@ class GroupMembersScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: _lightTeal, borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: _orangeBg, borderRadius: BorderRadius.circular(12)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            margin: const EdgeInsets.only(top: 2),
-            padding: const EdgeInsets.all(2),
-            decoration: const BoxDecoration(color: _teal, shape: BoxShape.circle),
+            margin: EdgeInsets.only(top: 2),
+            padding: EdgeInsets.all(2),
+            decoration: BoxDecoration(color: _orangeText, shape: BoxShape.circle),
             child: const Icon(Icons.info_outline, color: Colors.white, size: 14),
           ),
           const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Text(
               "Your agents manage who can send messages in this group.",
-              style: TextStyle(fontSize: 13, color: _teal, fontWeight: FontWeight.w600, height: 1.3),
+              style: TextStyle(fontSize: 13, color: _orangeText, fontWeight: FontWeight.w600, height: 1.3),
             ),
           ),
         ],
@@ -175,9 +173,7 @@ class GroupMembersScreen extends StatelessWidget {
             color: AppThemeColors.white,
             radius: AppThemeStyles.radiusXLarge,
             shadows: AppThemeStyles.shadowLight,
-          ).copyWith(
-            border: Border.all(color: AppThemeColors.borderLight),
-          ),
+          ).copyWith(border: Border.all(color: AppThemeColors.borderLight)),
           child: Column(
             children: List.generate(controller.filteredAgents.length, (index) {
               final agent = controller.filteredAgents[index];
@@ -207,9 +203,7 @@ class GroupMembersScreen extends StatelessWidget {
             color: AppThemeColors.white,
             radius: AppThemeStyles.radiusXLarge,
             shadows: AppThemeStyles.shadowLight,
-          ).copyWith(
-            border: Border.all(color: AppThemeColors.borderLight),
-          ),
+          ).copyWith(border: Border.all(color: AppThemeColors.borderLight)),
           child: Column(
             children: List.generate(controller.filteredVendors.length, (index) {
               final vendor = controller.filteredVendors[index];
@@ -239,9 +233,7 @@ class GroupMembersScreen extends StatelessWidget {
             color: AppThemeColors.white,
             radius: AppThemeStyles.radiusXLarge,
             shadows: AppThemeStyles.shadowLight,
-          ).copyWith(
-            border: Border.all(color: AppThemeColors.borderLight),
-          ),
+          ).copyWith(border: Border.all(color: AppThemeColors.borderLight)),
           child: Column(
             children: List.generate(controller.filteredCustomers.length, (index) {
               final member = controller.filteredCustomers[index];
@@ -280,7 +272,7 @@ class GroupMembersScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildAvatar(agent.name, avatarColor),
+          _buildAvatar(agent.name),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -298,7 +290,6 @@ class GroupMembersScreen extends StatelessWidget {
   }
 
   Widget _buildVendorTile(VendorMember vendor) {
-    final avatarColor = _getAvatarColor(vendor.name);
     final typeInfo = _getVendorTypeInfo(vendor.type);
     final subtitle = vendor.email?.isNotEmpty == true ? vendor.email! : (vendor.phone ?? "");
 
@@ -306,7 +297,7 @@ class GroupMembersScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildAvatar(vendor.name, avatarColor),
+          _buildAvatar(vendor.name),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -332,7 +323,7 @@ class GroupMembersScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildAvatar(member.name, avatarColor),
+          _buildAvatar(member.name),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -349,14 +340,14 @@ class GroupMembersScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar(String? name, Color color) {
+  Widget _buildAvatar(String? name) {
     final initial = (name?.isNotEmpty == true) ? name![0].toUpperCase() : "?";
     return Container(
       height: 44,
       width: 44,
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.15), shape: BoxShape.circle),
+      decoration: BoxDecoration(color: _orangeText.withValues(alpha: 0.15), shape: BoxShape.circle),
       child: Center(
-        child: Text(initial, style: AppTextStyle.bold.copyWith(fontSize: 18, color: color)),
+        child: Text(initial, style: AppTextStyle.bold.copyWith(fontSize: 18, color: _orangeText)),
       ),
     );
   }

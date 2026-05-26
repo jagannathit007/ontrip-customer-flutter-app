@@ -194,7 +194,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> with SingleTickerPr
                   color: AppThemeColors.primaryOrange,
                   backgroundColor: AppThemeColors.white,
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                     itemCount: ctrl.packages.length,
                     itemBuilder: (context, index) => _buildPackageCard(ctrl.packages[index]),
                   ),

@@ -529,25 +529,24 @@ class CommunityMediaScreen extends GetView<CommunityMediaCtrl> {
             style: AppTextStyle.medium.copyWith(fontSize: 15, color: AppThemeColors.greyText, height: 1.4),
           ),
           const SizedBox(height: 32),
-          SizedBox(
+          Container(
+            height: 50,
             width: double.infinity,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () => _openSelfieUI(context),
-                icon: const Icon(Icons.camera_alt_rounded),
-                label: Text("Take a Selfie", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.white,
-                  shadowColor: Colors.transparent,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.3), blurRadius: 12, offset: const Offset(0, 4))],
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () => _openSelfieUI(context),
+              icon: const Icon(Icons.camera_alt_rounded),
+              label: Text("Take a Selfie", style: AppTextStyle.semiBold.copyWith(fontSize: 16, color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                shadowColor: Colors.transparent,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
             ),
           ),

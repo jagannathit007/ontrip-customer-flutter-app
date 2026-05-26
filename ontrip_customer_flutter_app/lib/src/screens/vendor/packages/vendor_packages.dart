@@ -73,7 +73,6 @@ class _VendorPackagesScreenState extends State<VendorPackagesScreen> with Single
                       Container(
                         decoration: BoxDecoration(color: AppThemeColors.white, shape: BoxShape.circle),
                         padding: const EdgeInsets.all(2),
-
                         child: Container(
                           width: 40,
                           height: 40,

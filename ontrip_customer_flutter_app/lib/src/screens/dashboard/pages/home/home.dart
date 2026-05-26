@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   Widget _buildTripTabSection(Booking booking, HomeController ctrl) {
     final tabs = [
-      {"label": "Itinerary", "icon": Icons.map_outlined},
+      {"label": "Itinerary", "icon": Icons.route},
       {"label": "Includes", "icon": Icons.check_circle_outline},
       {"label": "Excludes", "icon": Icons.cancel_outlined},
       {"label": "Support", "icon": Icons.headset_mic_outlined},
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           const SizedBox(height: 16),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: IndexedStack(key: ValueKey(ctrl.selectedTab.value), index: ctrl.selectedTab.value, children: contents),
+            child: KeyedSubtree(key: ValueKey(ctrl.selectedTab.value), child: contents[ctrl.selectedTab.value]),
           ),
         ],
       ),
@@ -783,7 +783,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           Center(
             child: Container(
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(color: AppThemeColors.warning.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(color: AppThemeColors.greyText.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(20)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(5, (index) {
@@ -947,7 +947,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget _buildTripEmptyState(IconData icon, String msg) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.all(40),
+        width: Get.width,
+        // margin: const EdgeInsets.all(40),
         padding: const EdgeInsets.all(32),
         decoration: BoxDecoration(color: AppThemeColors.white, borderRadius: BorderRadius.circular(24), boxShadow: AppThemeStyles.shadowLight),
         child: Column(

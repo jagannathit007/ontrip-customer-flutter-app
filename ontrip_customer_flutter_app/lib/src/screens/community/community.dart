@@ -64,7 +64,7 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
                       color: AppThemeColors.primaryOrange,
                       backgroundColor: AppThemeColors.white,
                       child: ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                         itemCount: controller.vendorGroups.length,
                         itemBuilder: (context, index) => _buildVendorGroup(controller.vendorGroups[index], controller),
                       ),
@@ -225,9 +225,9 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
   Widget _buildHeader() {
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [AppThemeColors.primaryOrange, Color(0xFFF28E65)]),
+        color: AppThemeColors.white,
         borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32), bottomRight: Radius.circular(32)),
-        boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 20, offset: const Offset(0, 8))],
+        boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.15), blurRadius: 12, offset: const Offset(0, 4))],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 50, 24, 20),
@@ -238,19 +238,19 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
               children: [
                 Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: AppThemeColors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(16)),
-                  child: const Icon(Icons.groups_rounded, color: AppThemeColors.white, size: 28),
+                  decoration: BoxDecoration(color: AppThemeColors.primaryOrange.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(16)),
+                  child: const Icon(Icons.groups_rounded, color: AppThemeColors.primaryOrange, size: 28),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Community", style: AppTextStyle.bold.copyWith(fontSize: 27, color: AppThemeColors.white, letterSpacing: -0.8, height: 1.1)),
+                      Text("Community", style: AppTextStyle.bold.copyWith(fontSize: 27, color: AppThemeColors.blackText, letterSpacing: -0.8, height: 1.1)),
                       const SizedBox(height: 4),
                       Text(
                         "Connect with fellow travelers and experts",
-                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.white.withValues(alpha: 0.9), height: 1.3),
+                        style: AppTextStyle.medium.copyWith(fontSize: 13, color: AppThemeColors.blackText.withValues(alpha: 0.9), height: 1.3),
                       ),
                     ],
                   ),
@@ -278,15 +278,16 @@ class _CommunityScreenState extends State<CommunityScreen> with SingleTickerProv
           onTap: () => controller.navigateToChat(package?.id, coverImage, booking: booking),
           borderRadius: BorderRadius.circular(24),
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Hero(
                   tag: 'community_image_$index',
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppThemeColors.greyText.withValues(alpha: 0.5)),
+                      // boxShadow: [BoxShadow(color: AppThemeColors.primaryOrange.withValues(alpha: 0.2), blurRadius: 12, offset: const Offset(0, 4))],
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
